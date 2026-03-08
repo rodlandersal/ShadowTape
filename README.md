@@ -1,0 +1,2 @@
+# ShadowTape
+Investing research
