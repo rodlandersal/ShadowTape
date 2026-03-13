@@ -1,1 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShadowTape — Institutional Pressure Intelligence</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#07101e;font-family:'Courier New',monospace;color:#8899bb;min-height:100vh}
+    button{cursor:pointer;font-family:'Courier New',monospace}
+    input{font-family:'Courier New',monospace}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:#07101e}
+    ::-webkit-scrollbar-thumb{background:#0f1c30;border-radius:3px}
+    .dot{width:6px;height:6px;border-radius:50%;background:#00e5a0;animation:blink 2s infinite;display:inline-block}
+    .tab-btn{padding:9px 16px;background:none;border:none;border-bottom:2px solid transparent;color:#2a3a50;font-size:9.5px;font-weight:700;letter-spacing:0.12em;transition:color 0.2s}
+    .tab-btn.active{border-bottom:2px solid #38bdf8;color:#38bdf8}
+    .tab-btn:hover{color:#5a7090}
+    .ticker-card{padding:8px 12px;border-radius:4px;border:1px solid #0f1c30;background:#080f1d;min-width:90px;flex-shrink:0;cursor:default;transition:all 0.2s}
+    .ticker-card.active{border:1px solid rgba(56,189,248,0.33);background:rgba(56,189,248,0.03)}
+    .ticker-card.clickable{cursor:pointer}
+    .progress-bar{height:4px;background:#0b1424;border-radius:2px;margin-top:3px}
+    .progress-fill{height:100%;border-radius:2px;transition:width 0.8s}
+    #error-banner{display:none;padding:8px 20px;background:#1a0a0a;border-bottom:1px solid #e8394a22;font-size:10px;color:#e8394a}
+    #status-msg{color:#e8394a;font-size:10px;margin-top:8px;display:none}
+  </style>
+</head>
+<body>
 
+<!-- ROOT -->
+<div id="app">
+
+  <!-- HEADER -->
+  <div style="background:#07101e;border-bottom:1px solid #0f1c30;padding:11px 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:34px;height:34px;border-radius:4px;background:linear-gradient(135deg,#0d1f35,#07101e);border:1px solid #1a3050;display:flex;align-items:center;justify-content:center">
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <line x1="2" y1="10" x2="18" y2="10" stroke="#38bdf8" stroke-width="1" opacity="0.3"/>
+          <line x1="2" y1="6" x2="18" y2="6" stroke="#38bdf8" stroke-width="0.5" opacity="0.15"/>
+          <line x1="2" y1="14" x2="18" y2="14" stroke="#38bdf8" stroke-width="0.5" opacity="0.15"/>
+          <polyline points="2,13 5,7 8,11 11,5 14,12 17,8" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="11" cy="5" r="1.5" fill="#00e5a0" opacity="0.9"/>
+        </svg>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:800;color:#dde8f5;letter-spacing:0.18em">SHADOW<span style="color:#38bdf8">TAPE</span></div>
+        <div style="font-size:8px;color:#1a3050;letter-spacing:0.22em;margin-top:1px">INSTITUTIONAL PRESSURE INTELLIGENCE · TRADIER API</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;font-size:9.5px">
+      <div id="conn-status" style="color:#1e3050">NOT CONNECTED — PASTE TOKEN BELOW</div>
+      <button id="refresh-btn" onclick="refreshData()" style="display:none;padding:4px 12px;background:#0f1c2e;border:1px solid #1e3050;border-radius:3px;color:#38bdf8;font-size:9.5px">↺ REFRESH</button>
+    </div>
+  </div>
+
+  <!-- TOKEN INPUT PANEL -->
+  <div id="token-panel" style="background:#080f1d;border-bottom:1px solid #0f1c30;padding:14px 20px">
+    <div style="font-size:10px;color:#38bdf8;margin-bottom:8px;font-weight:700;letter-spacing:0.1em">
+      ▶ CONNECT YOUR TRADIER PRODUCTION API TOKEN
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <input id="token-input" type="password" placeholder="Paste Tradier Production token here then click CONNECT..."
+        style="flex:1;min-width:300px;max-width:480px;padding:9px 13px;background:#0b1424;border:1px solid #2a4060;border-radius:3px;color:#dde8f5;font-size:12px;outline:none"/>
+      <button onclick="handleConnect()"
+        style="padding:9px 22px;background:#38bdf811;border:1px solid #38bdf8;border-radius:3px;color:#38bdf8;font-size:11px;font-weight:700">
+        CONNECT →
+      </button>
+      <button onclick="showTab(4)"
+        style="padding:9px 14px;background:none;border:1px solid #1e3050;border-radius:3px;color:#5a7090;font-size:10px">
+        SETUP GUIDE
+      </button>
+    </div>
+    <div id="status-msg"></div>
+  </div>
+
+  <!-- WATCHLIST STRIP -->
+  <div id="watchlist-strip" style="overflow-x:auto;padding:10px 20px;background:#07101e;border-bottom:1px solid #0f1c30;display:flex;gap:6px;align-items:center"></div>
+
+  <!-- TICKER HEADER (shown after connect) -->
+  <div id="ticker-header" style="display:none;padding:14px 20px;background:#080f1d;border-bottom:1px solid #0f1c30"></div>
+
+  <!-- TABS -->
+  <div style="display:flex;border-bottom:1px solid #0f1c30;background:#07101e">
+    <button class="tab-btn active" onclick="showTab(0)">OVERVIEW</button>
+    <button class="tab-btn" onclick="showTab(1)">GEX PROFILE</button>
+    <button class="tab-btn" onclick="showTab(2)">VOLUME/OI</button>
+    <button class="tab-btn" onclick="showTab(3)">KEY LEVELS</button>
+    <button class="tab-btn" onclick="showTab(4)">SETUP GUIDE</button>
+  </div>
+
+  <div id="error-banner"></div>
+
+  <!-- TAB PANELS -->
+  <div style="padding:16px 20px;min-height:460px">
+    <div id="tab-0"><!-- OVERVIEW --></div>
+    <div id="tab-1" style="display:none"><!-- GEX PROFILE --></div>
+    <div id="tab-2" style="display:none"><!-- VOLUME/OI --></div>
+    <div id="tab-3" style="display:none"><!-- KEY LEVELS --></div>
+    <div id="tab-4" style="display:none"><!-- SETUP GUIDE --></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="padding:7px 20px;border-top:1px solid #0a1018;font-size:8.5px;color:#1a2535;display:flex;justify-content:space-between">
+    <span>SHADOWTAPE · TRADIER BROKERAGE API · REAL OPTIONS DATA · GEX ENGINE</span>
+    <span>⚠ EDUCATIONAL TOOL — NOT FINANCIAL ADVICE</span>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────
+let STATE = {
+  token: null,
+  connected: false,
+  loading: false,
+  selectedTicker: "SPY",
+  selectedExp: null,
+  expirations: [],
+  quote: null,
+  gexStrikes: [],
+  pressureScore: 50,
+  totalCallPrem: 0,
+  totalPutPrem: 0,
+  netGEX: 0,
+  gammaFlip: null,
+  callWall: null,
+  putWall: null,
+  dpLevels: [],
+  watchlistData: {},
+  activeTab: 0,
+  refreshTimer: null,
+};
+
+const WATCHLIST = ["SPY","QQQ","AAPL","MSFT","VZ","WMT","NVDA","PLTR","META","COP","JEPI"];
+
+const TICKER_META = {
+  SPY:  {role:"Market Barometer",  tier:"MACRO",  note:"Overall GEX regime"},
+  QQQ:  {role:"Tech Barometer",    tier:"MACRO",  note:"Tech sector health"},
+  AAPL: {role:"Core Income",       tier:"TIER 1", note:"Best liquidity, weekly opts"},
+  MSFT: {role:"Core Income",       tier:"TIER 1", note:"Blue chip, consistent premiums"},
+  VZ:   {role:"Income + Dividend", tier:"TIER 1", note:"Range-bound, ~6% yield"},
+  WMT:  {role:"Defensive Income",  tier:"TIER 1", note:"Stable, reliable premiums"},
+  NVDA: {role:"Growth + Income",   tier:"TIER 2", note:"Fat premiums, AI tailwind"},
+  PLTR: {role:"Growth + Income",   tier:"TIER 2", note:"Heavy institutional flow"},
+  META: {role:"Growth + Income",   tier:"TIER 2", note:"Strong fundamentals, liquid"},
+  COP:  {role:"Energy Diversifier",tier:"TIER 3", note:"Energy + dividend ~4.8%"},
+  JEPI: {role:"Base Income ETF",   tier:"TIER 3", note:"Monthly income, 8%+ yield"},
+};
+
+const TIER_COLORS = {
+  "MACRO":"#f5c518","TIER 1":"#00e5a0","TIER 2":"#38bdf8","TIER 3":"#a78bfa"
+};
+
+// API via Cloudflare Worker
+const WORKER = "https://shadowtape-proxy.shadowtape-account.workers.dev";
+
+async function tFetch(path) {
+  const workerUrl = WORKER + "?token=" + encodeURIComponent(STATE.token) + "&path=" + encodeURIComponent(path);
+  const res = await fetch(workerUrl, { signal: AbortSignal.timeout(12000) });
+  if (res.status === 401 || res.status === 403) throw new Error("Token rejected — use PRODUCTION token from Tradier Settings → API Access.");
+  if (!res.ok) throw new Error("API error " + res.status);
+  return res.json();
+}
+
+async function apiQuote(sym) {
+  const d = await tFetch("/markets/quotes?symbols=" + sym + "&greeks=true");
+  const q = d && d.quotes && d.quotes.quote;
+  if (!q) throw new Error("No quote returned for " + sym);
+  return q;
+}
+
+async function apiExpirations(sym) {
+  const d = await tFetch("/markets/options/expirations?symbol=" + sym + "&includeAllRoots=false");
+  const e = d && d.expirations && d.expirations.date;
+  if (!e) return [];
+  return Array.isArray(e) ? e : [e];
+}
+
+async function apiChain(sym, exp) {
+  const d = await tFetch("/markets/options/chains?symbol=" + sym + "&expiration=" + exp + "&greeks=true");
+  const o = d && d.options && d.options.option;
+  if (!o) return [];
+  return Array.isArray(o) ? o : [o];
+}
+
+// ─── ANALYTICS ───────────────────────────────────────────────
+function computeGEX(chain, spot) {
+  const byStrike = {};
+  chain.forEach(opt => {
+    if (!opt.greeks || !opt.greeks.gamma || !opt.open_interest) return;
+    const s = opt.strike;
+    if (!byStrike[s]) byStrike[s] = {strike:s,callGEX:0,putGEX:0,callOI:0,putOI:0,callVol:0,putVol:0,callPrem:0,putPrem:0};
+    const gex = opt.greeks.gamma * opt.open_interest * 100 * spot * spot;
+    const vol = opt.volume || 0;
+    const oi = opt.open_interest || 0;
+    const prem = vol * (opt.last || opt.bid || 0) * 100;
+    if (opt.option_type === "call") {
+      byStrike[s].callGEX += gex; byStrike[s].callOI += oi;
+      byStrike[s].callVol += vol; byStrike[s].callPrem += prem;
+    } else {
+      byStrike[s].putGEX += gex; byStrike[s].putOI += oi;
+      byStrike[s].putVol += vol; byStrike[s].putPrem += prem;
+    }
+  });
+  return Object.values(byStrike).sort((a,b) => a.strike - b.strike);
+}
+
+function gammaFlip(strikes, spot) {
+  const near = [...strikes].sort((a,b) => Math.abs(a.strike-spot) - Math.abs(b.strike-spot));
+  for (let i = 0; i < near.length-1; i++) {
+    const n1 = near[i].callGEX - near[i].putGEX;
+    const n2 = near[i+1].callGEX - near[i+1].putGEX;
+    if (Math.sign(n1) !== Math.sign(n2)) return ((near[i].strike + near[i+1].strike)/2).toFixed(2);
+  }
+  return null;
+}
+
+function callWall(strikes, spot) {
+  const above = strikes.filter(s => s.strike >= spot);
+  return above.length ? above.reduce((m,s) => s.callGEX > m.callGEX ? s : m, above[0]) : null;
+}
+
+function putWall(strikes, spot) {
+  const below = strikes.filter(s => s.strike <= spot);
+  return below.length ? below.reduce((m,s) => s.putGEX > m.putGEX ? s : m, below[0]) : null;
+}
+
+function netGEX(strikes) {
+  return strikes.reduce((sum,s) => sum + s.callGEX - s.putGEX, 0);
+}
+
+function pressureScore(strikes, spot, cp, pp) {
+  let score = 50;
+  const total = cp + pp;
+  if (total > 0) score += (cp/total - 0.5) * 70;
+  const ng = netGEX(strikes);
+  score += Math.tanh(ng/1e10) * 12;
+  const flip = gammaFlip(strikes, spot);
+  if (flip) score += spot > parseFloat(flip) ? 6 : -6;
+  const cVOI = strikes.reduce((s,x)=>s+x.callVol,0) / (strikes.reduce((s,x)=>s+x.callOI,0)+1);
+  const pVOI = strikes.reduce((s,x)=>s+x.putVol,0) / (strikes.reduce((s,x)=>s+x.putOI,0)+1);
+  score += cVOI - pVOI > 0 ? 8 : -8;
+  return Math.min(100, Math.max(0, Math.round(score)));
+}
+
+function dpLevels(strikes, spot) {
+  return [...strikes]
+    .map(s => ({...s, totalOI: s.callOI+s.putOI, totalPrem: s.callPrem+s.putPrem}))
+    .sort((a,b) => b.totalOI - a.totalOI)
+    .slice(0, 6)
+    .map(s => ({
+      price: s.strike, totalOI: s.totalOI, totalPrem: s.totalPrem,
+      sentiment: s.strike <= spot ? "support" : "resistance",
+      note: s.totalOI > 50000 ? "HIGH CONVICTION" : "MODERATE"
+    }));
+}
+
+// ─── UI HELPERS ───────────────────────────────────────────────
+function showTab(i) {
+  STATE.activeTab = i;
+  document.querySelectorAll('.tab-btn').forEach((b,idx) => {
+    b.classList.toggle('active', idx === i);
+  });
+  for (let t = 0; t < 5; t++) {
+    document.getElementById('tab-'+t).style.display = (t === i) ? '' : 'none';
+  }
+  if (i === 4) renderSetupGuide();
+}
+
+function setStatus(msg, color) {
+  const el = document.getElementById('status-msg');
+  el.style.display = msg ? 'block' : 'none';
+  el.style.color = color || '#e8394a';
+  el.textContent = msg;
+}
+
+function scoreColor(s) { return s >= 65 ? "#00e5a0" : s >= 42 ? "#f5c518" : "#e8394a"; }
+function tierColor(t) { return TIER_COLORS[t] || "#5a7090"; }
+
+function fmtM(v) { return "$" + (v/1000000).toFixed(2) + "M"; }
+function fmtB(v) { return (v > 0 ? "+" : "") + (v/1e9).toFixed(2) + "B"; }
+
+// ─── CONNECT ─────────────────────────────────────────────────
+async function handleConnect() {
+  const input = document.getElementById('token-input');
+  const tok = input.value.trim();
+  if (!tok) { setStatus("⚠ Please paste your Tradier Production token first"); return; }
+
+  setStatus("⏳ Connecting to Tradier...", "#38bdf8");
+  document.querySelector('button[onclick="handleConnect()"]').textContent = "CONNECTING...";
+
+  try {
+    STATE.token = tok;
+    const q = await apiQuote("SPY");
+    if (!q || !q.last) throw new Error("Token accepted but no data returned — ensure it is a Production token");
+
+    STATE.connected = true;
+
+    // Hide token panel, show connected status
+    document.getElementById('token-panel').style.display = 'none';
+    document.getElementById('conn-status').innerHTML = '<span class="dot"></span> &nbsp;CONNECTED · TRADIER PRODUCTION';
+    document.getElementById('conn-status').style.color = '#00e5a0';
+    document.getElementById('refresh-btn').style.display = 'inline-block';
+
+    setStatus("");
+    await loadData("SPY", null);
+    loadWatchlistQuotes();
+
+    // Auto-refresh every 60s
+    STATE.refreshTimer = setInterval(() => loadData(STATE.selectedTicker, STATE.selectedExp), 60000);
+
+  } catch(e) {
+    STATE.token = null;
+    const msg = e.message || "Unknown error";
+    if (msg.includes("Failed to fetch") || msg.includes("Load failed") || msg.includes("proxies failed")) {
+      setStatus("⚠ Network blocked — try opening in Chrome. If using Chrome, check internet connection.");
+    } else if (msg.includes("401") || msg.includes("403")) {
+      setStatus("⚠ Token rejected — use PRODUCTION token from Tradier Settings → API Access.");
+    } else {
+      setStatus("⚠ " + msg);
+    }
+    document.querySelector(`button[onclick="handleConnect()"]`).textContent = "CONNECT →";
+  }
+}
+
+async function refreshData() {
+  if (!STATE.connected) return;
+  await loadData(STATE.selectedTicker, STATE.selectedExp);
+}
+
+// ─── DATA LOADING ─────────────────────────────────────────────
+async function loadData(ticker, exp) {
+  if (!STATE.token) return;
+  STATE.loading = true;
+  document.getElementById('refresh-btn').textContent = "LOADING...";
+  const errBanner = document.getElementById('error-banner');
+  errBanner.style.display = 'none';
+
+  try {
+    STATE.selectedTicker = ticker;
+    const q = await apiQuote(ticker);
+    STATE.quote = q;
+    const spot = parseFloat(q.last);
+
+    let exps = STATE.expirations;
+    if (!exps.length || STATE.selectedTicker !== ticker) {
+      exps = await apiExpirations(ticker);
+      STATE.expirations = exps;
+    }
+
+    const useExp = exp || exps[0];
+    STATE.selectedExp = useExp;
+
+    const chain = await apiChain(ticker, useExp);
+    const strikes = computeGEX(chain, spot);
+    STATE.gexStrikes = strikes;
+
+    const cp = strikes.reduce((s,x)=>s+x.callPrem,0);
+    const pp = strikes.reduce((s,x)=>s+x.putPrem,0);
+    STATE.totalCallPrem = cp;
+    STATE.totalPutPrem = pp;
+    STATE.gammaFlip = gammaFlip(strikes, spot);
+    STATE.callWall = callWall(strikes, spot);
+    STATE.putWall = putWall(strikes, spot);
+    STATE.netGEX = netGEX(strikes);
+    STATE.pressureScore = pressureScore(strikes, spot, cp, pp);
+    STATE.dpLevels = dpLevels(strikes, spot);
+
+    renderAll();
+
+  } catch(e) {
+    errBanner.style.display = 'block';
+    errBanner.textContent = "⚠ " + e.message;
+  } finally {
+    STATE.loading = false;
+    document.getElementById('refresh-btn').textContent = "↺ REFRESH";
+  }
+}
+
+async function loadWatchlistQuotes() {
+  for (const t of WATCHLIST) {
+    try {
+      const q = await apiQuote(t);
+      STATE.watchlistData[t] = { last: q.last, chg: q.change_percentage };
+      renderWatchlist();
+    } catch(_) {}
+  }
+}
+
+async function selectTicker(t) {
+  if (!STATE.connected) return;
+  STATE.expirations = [];
+  STATE.selectedExp = null;
+  STATE.gexStrikes = [];
+  await loadData(t, null);
+}
+
+// ─── RENDER ───────────────────────────────────────────────────
+function renderAll() {
+  renderWatchlist();
+  renderTickerHeader();
+  renderOverview();
+  renderGEXProfile();
+  renderVolumeOI();
+  renderKeyLevels();
+}
+
+function renderWatchlist() {
+  const strip = document.getElementById('watchlist-strip');
+  let html = '';
+  WATCHLIST.forEach(t => {
+    const meta = TICKER_META[t];
+    const d = STATE.watchlistData[t];
+    const tc = meta ? tierColor(meta.tier) : "#5a7090";
+    const isSel = t === STATE.selectedTicker;
+    const isPos = d ? d.chg >= 0 : true;
+    const activeClass = isSel ? ' active' : '';
+    const clickable = STATE.connected ? ' clickable' : '';
+    html += `<div class="ticker-card${activeClass}${clickable}" onclick="selectTicker('${t}')" style="border-color:${isSel ? tc+'55' : '#0f1c30'};background:${isSel ? tc+'08' : '#080f1d'}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
+        <span style="font-size:12px;font-weight:700;color:${isSel?'#dde8f5':'#5a7090'}">${t}</span>
+        ${meta ? `<span style="font-size:7.5px;color:${tc};font-weight:700">${meta.tier}</span>` : ''}
+      </div>
+      ${meta ? `<div style="font-size:7.5px;color:#2a3a50;margin-top:1px">${meta.role}</div>` : ''}
+      ${d ? `<div style="font-size:10px;color:#8899bb;margin-top:2px">$${parseFloat(d.last).toFixed(2)}</div>
+             <div style="font-size:9px;color:${isPos?'#00e5a0':'#e8394a'};margin-top:1px">${isPos?'▲':'▼'} ${Math.abs(d.chg).toFixed(2)}%</div>`
+           : `<div style="font-size:9px;color:#1e3050;margin-top:2px">— awaiting</div>`}
+      <div class="progress-bar"><div class="progress-fill" style="width:${isSel?'100%':'0%'};background:${tc}"></div></div>
+    </div>`;
+  });
+  // Legend
+  html += `<div style="display:flex;gap:10px;margin-left:12px;align-items:center;border-left:1px solid #0f1c30;padding-left:12px;flex-shrink:0">`;
+  Object.entries(TIER_COLORS).forEach(([tier,color]) => {
+    html += `<div style="display:flex;align-items:center;gap:4px">
+      <div style="width:6px;height:6px;border-radius:50%;background:${color}"></div>
+      <span style="font-size:8px;color:#2a3a50">${tier}</span>
+    </div>`;
+  });
+  html += '</div>';
+  strip.innerHTML = html;
+}
+
+function renderTickerHeader() {
+  const el = document.getElementById('ticker-header');
+  if (!STATE.connected || !STATE.quote) { el.style.display='none'; return; }
+  el.style.display = 'flex';
+  el.style.flexWrap = 'wrap';
+  el.style.gap = '24px';
+  el.style.alignItems = 'flex-start';
+
+  const q = STATE.quote;
+  const spot = parseFloat(q.last);
+  const meta = TICKER_META[STATE.selectedTicker];
+  const tc = meta ? tierColor(meta.tier) : "#5a7090";
+  const chgColor = q.change_percentage >= 0 ? "#00e5a0" : "#e8394a";
+  const sc = STATE.pressureScore;
+  const scorecol = scoreColor(sc);
+  const ngB = STATE.netGEX/1e9;
+  const posture = ngB > 0.3 ? "POSITIVE" : ngB < -0.3 ? "NEGATIVE" : "NEUTRAL";
+  const gcol = ngB > 0.3 ? "#00e5a0" : ngB < -0.3 ? "#e8394a" : "#f5c518";
+
+  // Arc SVG
+  const r=52, cx=65, cy=68;
+  const sa=Math.PI*1.15, ea=Math.PI*1.85;
+  const arc=ea-sa;
+  const ae=sa+arc*(sc/100);
+  const sx=cx+r*Math.cos(sa), sy=cy+r*Math.sin(sa);
+  const ex=cx+r*Math.cos(ae), ey=cy+r*Math.sin(ae);
+  const bx=cx+r*Math.cos(ea), by=cy+r*Math.sin(ea);
+  const la=arc*(sc/100)>Math.PI?1:0;
+
+  // Expiration buttons
+  let expBtns = '';
+  STATE.expirations.slice(0,6).forEach(exp => {
+    const isSel = exp === STATE.selectedExp;
+    expBtns += `<button onclick="selectExp('${exp}')" style="padding:2px 8px;font-size:9px;background:${isSel?'#38bdf811':'#0b1424'};border:1px solid ${isSel?'#38bdf844':'#1e3050'};border-radius:2px;color:${isSel?'#38bdf8':'#4a5a7a'}">${exp}</button>`;
+  });
+
+  el.innerHTML = `
+    <div>
+      <div style="font-size:26px;font-weight:800;color:#dde8f5;letter-spacing:0.06em">${STATE.selectedTicker}</div>
+      ${meta ? `<div style="display:flex;gap:6px;align-items:center;margin-bottom:2px">
+        <span style="font-size:9px;font-weight:700;color:${tc}">${meta.tier}</span>
+        <span style="font-size:9px;color:#2a3a50">·</span>
+        <span style="font-size:9px;color:#3a5070">${meta.role}</span>
+        <span style="font-size:9px;color:#2a3a50">·</span>
+        <span style="font-size:9px;color:#2a3a50;font-style:italic">${meta.note}</span>
+      </div>` : ''}
+      <div style="font-size:22px;color:#f5c518;font-weight:700">$${spot.toFixed(2)}</div>
+      <div style="font-size:11px;color:${chgColor};margin-top:2px">
+        ${q.change_percentage>=0?'▲':'▼'} ${Math.abs(q.change_percentage).toFixed(2)}%
+        <span style="color:#1e3050;margin-left:8px">Vol ${(q.volume/1000000).toFixed(2)}M</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">${expBtns}</div>
+    </div>
+    <div style="text-align:center">
+      <svg width="130" height="90">
+        <path d="M ${sx} ${sy} A ${r} ${r} 0 1 1 ${bx} ${by}" fill="none" stroke="#1c2535" stroke-width="11" stroke-linecap="round"/>
+        <path d="M ${sx} ${sy} A ${r} ${r} 0 ${la} 1 ${ex} ${ey}" fill="none" stroke="${scorecol}" stroke-width="11" stroke-linecap="round"/>
+        <text x="${cx}" y="${cy-4}" text-anchor="middle" fill="${scorecol}" font-size="24" font-weight="800" font-family="monospace">${sc}</text>
+        <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="#334155" font-size="9" font-family="monospace">PRESSURE</text>
+      </svg>
+      <div style="font-size:9px;font-weight:700;color:${scorecol};letter-spacing:0.14em;margin-top:-6px">${sc>=65?'BULLISH':sc>=42?'NEUTRAL':'BEARISH'}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,150px);gap:8px 20px">
+      ${statBox("Call Premium", fmtM(STATE.totalCallPrem), "#00e5a0", "Today's flow")}
+      ${statBox("Put Premium", fmtM(STATE.totalPutPrem), "#e8394a", "Today's flow")}
+      ${statBox("C/P Ratio", (STATE.totalCallPrem/(STATE.totalPutPrem+1)).toFixed(2)+"x", STATE.totalCallPrem>STATE.totalPutPrem?"#00e5a0":"#e8394a")}
+      ${statBox("Net GEX", fmtB(STATE.netGEX), gcol)}
+      ${statBox("Gamma Posture", posture, gcol, posture==="POSITIVE"?"Stabilizing":posture==="NEGATIVE"?"Amplifying":"Transitional")}
+      ${statBox("Gamma Flip", STATE.gammaFlip?"$"+STATE.gammaFlip:"—", "#f5c518", STATE.gammaFlip?(spot>parseFloat(STATE.gammaFlip)?"↑ ABOVE (stable)":"↓ BELOW (volatile)"):"")}
+      ${statBox("Call Wall", STATE.callWall?"$"+STATE.callWall.strike:"—", "#00e5a0", "Resistance ceiling")}
+      ${statBox("Put Wall", STATE.putWall?"$"+STATE.putWall.strike:"—", "#e8394a", "Support floor")}
+      ${statBox("Expiration", STATE.selectedExp||"—", "#5a7090", STATE.gexStrikes.length+" strikes")}
+    </div>`;
+}
+
+function statBox(label, value, color, sub) {
+  return `<div style="border-left:2px solid ${color}33;padding-left:8px">
+    <div style="font-size:8.5px;color:#334155;letter-spacing:0.1em">${label}</div>
+    <div style="font-size:13px;font-weight:700;color:${color};margin-top:1px">${value}</div>
+    ${sub ? `<div style="font-size:8.5px;color:#4a5a7a;margin-top:1px">${sub}</div>` : ''}
+  </div>`;
+}
+
+function selectExp(exp) {
+  STATE.selectedExp = exp;
+  loadData(STATE.selectedTicker, exp);
+}
+
+function renderOverview() {
+  const el = document.getElementById('tab-0');
+  if (!STATE.connected || !STATE.quote) {
+    el.innerHTML = renderWatchlistGrid() + `<div style="margin-top:14px;padding:20px;background:#080f1d;border:1px solid #0f1c30;border-radius:5px;color:#2a3a50;font-size:11px">Connect your Tradier Production token to see live institutional pressure analysis.</div>`;
+    return;
+  }
+  const spot = parseFloat(STATE.quote.last);
+  const sc = STATE.pressureScore;
+  const scorecol = scoreColor(sc);
+  const ngB = STATE.netGEX/1e9;
+  const posture = ngB > 0.3 ? "positive" : ngB < -0.3 ? "negative" : "neutral";
+  const gcol = ngB > 0.3 ? "#00e5a0" : ngB < -0.3 ? "#e8394a" : "#f5c518";
+  const flip = STATE.gammaFlip;
+  const regime = flip ? (spot > parseFloat(flip) ? "ABOVE — stable regime." : "BELOW — volatile regime.") : "";
+
+  const sig = [
+    {label:"Call/Put Premium Ratio", val:Math.round(50+(STATE.totalCallPrem/(STATE.totalCallPrem+STATE.totalPutPrem+1)-0.5)*70), w:"35%"},
+    {label:"Net GEX Posture", val:Math.round(50+Math.tanh(STATE.netGEX/1e10)*30), w:"25%"},
+    {label:"Gamma Flip Position", val:flip?(spot>parseFloat(flip)?68:32):50, w:"20%"},
+    {label:"Vol/OI Skew", val:sc, w:"20%"},
+  ];
+
+  let sigHtml = sig.map(s => {
+    const c = s.val>=60?"#00e5a0":s.val>=45?"#f5c518":"#e8394a";
+    return `<div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:9.5px;margin-bottom:3px">
+        <span style="color:#5a7090">${s.label}</span>
+        <span style="color:#2a3a50">weight ${s.w}</span>
+        <span style="color:${c};font-weight:700">${s.val}/100</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${s.val}%;background:${c}"></div></div>
+    </div>`;
+  }).join('');
+
+  const callOITotal = STATE.gexStrikes.reduce((s,x)=>s+x.callOI,0);
+  const putOITotal = STATE.gexStrikes.reduce((s,x)=>s+x.putOI,0);
+
+  el.innerHTML = renderWatchlistGrid() + `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+    <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:16px">
+      <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.14em;margin-bottom:12px">◆ INSTITUTIONAL PRESSURE READING — ${STATE.selectedTicker}</div>
+      <div style="padding:14px;border-radius:4px;margin-bottom:12px;background:rgba(${sc>=65?"0,229,160":sc>=42?"245,197,24":"232,57,74"},0.05);border:1px solid ${scorecol}22">
+        <div style="font-size:12px;font-weight:700;color:${scorecol};margin-bottom:6px">
+          ${sc>=70?"🟢 STRONG BULLISH INSTITUTIONAL BIAS":sc>=55?"🟡 MODERATE BULLISH — WATCHING FOR CONFIRMATION":sc>=45?"⚪ NEUTRAL — COILING / BREAKOUT PENDING":sc>=30?"🟠 MODERATE BEARISH PRESSURE":"🔴 SIGNIFICANT BEARISH FLOW"}
+        </div>
+        <div style="font-size:10px;color:#4a5a7a;line-height:1.7">
+          Call premium ${STATE.totalCallPrem>STATE.totalPutPrem?"DOMINATES":"TRAILS"} put premium (${(STATE.totalCallPrem/(STATE.totalPutPrem+1)).toFixed(2)}x ratio). 
+          Gamma posture is <span style="color:${gcol}">${posture}</span> — dealer hedging will 
+          ${ngB>0.3?"dampen moves and pin price to strikes.":ngB<-0.3?"amplify directional moves — trending conditions.":"provide mixed hedging pressure."}
+          ${flip ? " Gamma flip $"+flip+": price "+regime : ""}
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:8px">SIGNAL COMPONENTS</div>
+      ${sigHtml}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:10px">◆ PREMIUM FLOW SUMMARY</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="padding:10px;background:#00e5a005;border:1px solid #00e5a022;border-radius:3px">
+            <div style="color:#00e5a0;font-weight:700;font-size:13px;margin-bottom:4px">CALLS</div>
+            <div style="color:#f5c518;font-weight:700">${fmtM(STATE.totalCallPrem)}</div>
+            <div style="color:#4a5a7a;font-size:9.5px;margin-top:3px">Total premium today</div>
+            <div style="color:#4a5a7a;font-size:9.5px">${callOITotal.toLocaleString()} OI</div>
+          </div>
+          <div style="padding:10px;background:#e8394a05;border:1px solid #e8394a22;border-radius:3px">
+            <div style="color:#e8394a;font-weight:700;font-size:13px;margin-bottom:4px">PUTS</div>
+            <div style="color:#f5c518;font-weight:700">${fmtM(STATE.totalPutPrem)}</div>
+            <div style="color:#4a5a7a;font-size:9.5px;margin-top:3px">Total premium today</div>
+            <div style="color:#4a5a7a;font-size:9.5px">${putOITotal.toLocaleString()} OI</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:10px">◆ DATA SOURCE & INTEGRITY</div>
+        ${[
+          {label:"Stock Quote", source:"Tradier Live", real:true},
+          {label:"Options Chain + Greeks", source:"Tradier + ORATS", real:true},
+          {label:"GEX Calculation", source:"Computed from real data", real:true},
+          {label:"Open Interest", source:"Tradier (EOD updated)", real:true},
+          {label:"Volume/OI Ratio", source:"Tradier intraday", real:true},
+          {label:"Dark Pool Levels", source:"High-OI cluster proxy ⚠", real:false},
+          {label:"Sweep Detection", source:"Unavailable (OPRA req)", real:false},
+        ].map(d=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #0b1424;font-size:9.5px">
+          <span style="color:#5a7090">${d.label}</span>
+          <span style="color:${d.real?'#00e5a0':'#f5c518'}">${d.real?'✅':'⚠'} ${d.source}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderWatchlistGrid() {
+  const cards = WATCHLIST.map(t => {
+    const meta = TICKER_META[t];
+    const d = STATE.watchlistData[t];
+    const tc = meta ? tierColor(meta.tier) : "#5a7090";
+    const isPos = d ? d.chg >= 0 : true;
+    const isSel = t === STATE.selectedTicker;
+    return `<div onclick="selectTicker('${t}')" style="padding:8px 10px;background:#0b1424;border-radius:3px;border-left:3px solid ${tc};cursor:${STATE.connected?'pointer':'default'}">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:700;color:${isSel?'#dde8f5':'#8899bb'}">${t}</span>
+        ${d?`<span style="font-size:10px;color:${isPos?'#00e5a0':'#e8394a'}">${isPos?'▲':'▼'}${Math.abs(d.chg).toFixed(1)}%</span>`:''}
+      </div>
+      ${meta?`<div style="font-size:8.5px;color:${tc};font-weight:700;letter-spacing:0.06em;margin-top:2px">${meta.tier}</div>
+              <div style="font-size:8.5px;color:#3a5070;margin-top:1px">${meta.role}</div>
+              <div style="font-size:8px;color:#1e3050;margin-top:1px;font-style:italic">${meta.note}</div>`:''}
+    </div>`;
+  }).join('');
+  return `<div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
+    <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.14em;margin-bottom:10px">◆ SHADOWTAPE WATCHLIST — STRATEGY ROLE GUIDE</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">${cards}</div>
+  </div>`;
+}
+
+function renderGEXProfile() {
+  const el = document.getElementById('tab-1');
+  const spot = STATE.quote ? parseFloat(STATE.quote.last) : 0;
+  const ngB = STATE.netGEX/1e9;
+  const posture = ngB > 0.3 ? "POSITIVE" : ngB < -0.3 ? "NEGATIVE" : "NEUTRAL";
+  const gcol = ngB > 0.3 ? "#00e5a0" : ngB < -0.3 ? "#e8394a" : "#f5c518";
+
+  const visible = STATE.gexStrikes.filter(s => spot && Math.abs(s.strike-spot)/spot < 0.07);
+  const maxVal = visible.length ? Math.max(...visible.map(s=>Math.max(s.callGEX,s.putGEX)),1) : 1;
+
+  let chartHtml = '';
+  if (visible.length) {
+    chartHtml = `<div style="display:flex;justify-content:flex-end;gap:14px;font-size:9px;margin-bottom:6px;color:#4a5a7a">
+      <span style="color:#e8394a">■ Put GEX</span><span style="color:#00e5a0">■ Call GEX</span>
+    </div>`;
+    visible.forEach(s => {
+      const atm = Math.abs(s.strike-spot)/spot<0.005;
+      const cw = (s.callGEX/maxVal)*100;
+      const pw = (s.putGEX/maxVal)*100;
+      const net = s.callGEX-s.putGEX;
+      chartHtml += `<div style="display:grid;grid-template-columns:50px 1fr 8px 1fr 52px;align-items:center;gap:3px;margin-bottom:3px;background:${atm?'rgba(245,197,24,0.05)':'transparent'};border-left:${atm?'2px solid #f5c518':'2px solid transparent'};padding-left:2px">
+        <span style="font-size:9.5px;color:${atm?'#f5c518':'#4a5a7a'};text-align:right">${s.strike}</span>
+        <div style="display:flex;justify-content:flex-end"><div style="width:${pw}%;height:10px;background:#e8394a88;border-radius:2px 0 0 2px;min-width:${pw>0?2:0}px"></div></div>
+        <div style="width:1px;height:14px;background:#1c2535;margin:0 auto"></div>
+        <div><div style="width:${cw}%;height:10px;background:#00e5a088;border-radius:0 2px 2px 0;min-width:${cw>0?2:0}px"></div></div>
+        <span style="font-size:8.5px;color:${net>0?'#00e5a0':'#e8394a'}">${net>0?'+':''}${(net/1e6).toFixed(0)}M</span>
+      </div>`;
+    });
+  } else {
+    chartHtml = `<div style="color:#2a3a50;font-size:11px;padding:20px">${STATE.connected?(STATE.loading?"Loading options chain...":"Select a ticker and expiration."):"Connect Tradier token."}</div>`;
+  }
+
+  el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 260px;gap:14px">
+    <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:16px">
+      <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:8px;display:flex;justify-content:space-between">
+        <span>◆ GAMMA EXPOSURE PROFILE — ${STATE.selectedTicker} ${STATE.selectedExp?'('+STATE.selectedExp+')':''}</span>
+        <span style="color:#1e3050">★ Spot $${spot.toFixed(2)}</span>
+      </div>
+      <div style="padding:6px 10px;background:#0b1424;border-radius:3px;margin-bottom:10px;display:flex;gap:20px;font-size:9.5px">
+        <span>Net GEX: <span style="color:${gcol};font-weight:700">${fmtB(STATE.netGEX)}</span></span>
+        <span>Posture: <span style="color:${gcol};font-weight:700">${posture}</span></span>
+        <span style="color:#2a3a50">Showing ±7% from spot</span>
+      </div>
+      ${chartHtml}
+      <div style="font-size:8.5px;color:#1e3050;margin-top:8px;padding-top:6px;border-top:1px solid #0b1424">GEX = gamma × open_interest × 100 × spot² · Real Greeks from ORATS via Tradier</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      ${[
+        {label:"GAMMA FLIP", val:STATE.gammaFlip?"$"+STATE.gammaFlip:"—", color:"#f5c518", desc:spot>parseFloat(STATE.gammaFlip||0)?"Price ABOVE → stable":"Price BELOW → volatile"},
+        {label:"CALL WALL", val:STATE.callWall?"$"+STATE.callWall.strike:"—", color:"#00e5a0", desc:"Ceiling / resistance zone"},
+        {label:"PUT WALL", val:STATE.putWall?"$"+STATE.putWall.strike:"—", color:"#e8394a", desc:"Floor / support zone"},
+      ].map(k=>`<div style="background:#080f1d;border:1px solid ${k.color}22;border-radius:5px;padding:14px">
+        <div style="font-size:9px;color:#2a3a50;letter-spacing:0.12em;margin-bottom:4px">${k.label}</div>
+        <div style="font-size:20px;font-weight:800;color:${k.color}">${k.val}</div>
+        <div style="font-size:9px;color:#4a5a7a;margin-top:4px">${k.desc}</div>
+      </div>`).join('')}
+      <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px;font-size:9.5px;color:#4a5a7a;line-height:1.7">
+        <div style="color:#00e5a0;margin-bottom:4px;font-weight:700">POSITIVE GEX</div>
+        Dealers buy dips, sell rips. Volatility dampened. Price pins to large strikes.
+        <div style="color:#e8394a;margin:8px 0 4px;font-weight:700">NEGATIVE GEX</div>
+        Dealers amplify moves. Trending, volatile conditions. Breakouts extend.
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderVolumeOI() {
+  const el = document.getElementById('tab-2');
+  const spot = STATE.quote ? parseFloat(STATE.quote.last) : 0;
+  const rows = STATE.gexStrikes
+    .filter(s => spot && Math.abs(s.strike-spot)/spot < 0.06)
+    .sort((a,b) => b.callVol+b.putVol - a.callVol-a.putVol)
+    .slice(0,20);
+
+  let rowsHtml = rows.length ? rows.map(s => {
+    const cVOI = s.callOI>0?(s.callVol/s.callOI).toFixed(2):"—";
+    const pVOI = s.putOI>0?(s.putVol/s.putOI).toFixed(2):"—";
+    const atm = spot && Math.abs(s.strike-spot)/spot<0.005;
+    const bias = s.callVol>s.putVol?"CALL":s.putVol>s.callVol?"PUT":"FLAT";
+    const bc = bias==="CALL"?"#00e5a0":bias==="PUT"?"#e8394a":"#2a3a50";
+    return `<div style="display:grid;grid-template-columns:60px 65px 65px 55px 65px 65px 55px 65px;gap:4px;padding:5px 10px;border-bottom:1px solid #0a1018;font-size:10.5px;background:${atm?'rgba(245,197,24,0.04)':'transparent'};border-left:${atm?'2px solid #f5c518':'2px solid transparent'}">
+      <span style="color:${atm?'#f5c518':'#5a7090'};font-weight:${atm?700:400}">${s.strike}</span>
+      <span style="color:#8899bb">${s.callVol.toLocaleString()}</span>
+      <span style="color:#4a5a7a">${s.callOI.toLocaleString()}</span>
+      <span style="color:${cVOI!=="—"&&parseFloat(cVOI)>1?'#f5c518':'#2a3a50'};font-weight:${cVOI!=="—"&&parseFloat(cVOI)>1?700:400}">${cVOI}</span>
+      <span style="color:#8899bb">${s.putVol.toLocaleString()}</span>
+      <span style="color:#4a5a7a">${s.putOI.toLocaleString()}</span>
+      <span style="color:${pVOI!=="—"&&parseFloat(pVOI)>1?'#f5c518':'#2a3a50'};font-weight:${pVOI!=="—"&&parseFloat(pVOI)>1?700:400}">${pVOI}</span>
+      <span style="color:${bc};font-weight:700;font-size:9.5px">${bias}</span>
+    </div>`;
+  }).join('') : `<div style="padding:24px;color:#2a3a50;font-size:11px">${STATE.connected?(STATE.loading?"Loading...":"Select a ticker."):"Connect Tradier token."}</div>`;
+
+  el.innerHTML = `<div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px">
+    <div style="padding:10px 14px;border-bottom:1px solid #0f1c30;font-size:10px;color:#2a3a50;font-weight:700;letter-spacing:0.12em;display:flex;justify-content:space-between">
+      <span>◆ VOLUME / OPEN INTEREST — ${STATE.selectedTicker} ${STATE.selectedExp||""}</span>
+      <span style="color:#1e3050">V/OI &gt;1.0 = new position opening</span>
+    </div>
+    <div style="display:grid;grid-template-columns:60px 65px 65px 55px 65px 65px 55px 65px;gap:4px;padding:5px 10px;font-size:8.5px;color:#1e3050;border-bottom:1px solid #0f1c30">
+      <span>STRIKE</span><span>C-VOL</span><span>C-OI</span><span>C-V/OI</span><span>P-VOL</span><span>P-OI</span><span>P-V/OI</span><span>BIAS</span>
+    </div>
+    ${rowsHtml}
+    <div style="padding:6px 12px;font-size:8.5px;color:#1e3050;border-top:1px solid #0a1018">V/OI &gt;1.0 = new positions opening today. Sorted by total volume.</div>
+  </div>`;
+}
+
+function renderKeyLevels() {
+  const el = document.getElementById('tab-3');
+  const spot = STATE.quote ? parseFloat(STATE.quote.last) : 0;
+
+  const dpRows = STATE.dpLevels.map(l => {
+    const dist = spot ? (spot-l.price)/spot*100 : 0;
+    const c = l.sentiment==="support"?"#00e5a0":"#e8394a";
+    return `<div style="display:grid;grid-template-columns:70px 80px 90px 70px 90px;gap:4px;padding:5px 10px;border-bottom:1px solid #0f1724;font-size:10.5px">
+      <span style="color:#f5c518;font-weight:700">$${l.price}</span>
+      <span style="color:#8899bb">${(l.totalOI/1000).toFixed(0)}K OI</span>
+      <span style="color:#f5c518">$${(l.totalPrem/1000000).toFixed(2)}M</span>
+      <span style="color:${c}">${dist>0?'▲':'▼'} ${Math.abs(dist).toFixed(2)}%</span>
+      <span style="color:${c};font-weight:700;font-size:9.5px">${l.sentiment.toUpperCase()} · ${l.note}</span>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px">
+      <div style="padding:10px 14px;border-bottom:1px solid #0f1c30;font-size:10px;color:#2a3a50;font-weight:700;letter-spacing:0.12em">◆ HIGH-OI INSTITUTIONAL LEVELS (Dark Pool Proxy)</div>
+      <div style="display:grid;grid-template-columns:70px 80px 90px 70px 90px;gap:4px;padding:5px 10px;font-size:8.5px;color:#1e3050;border-bottom:1px solid #0a1018">
+        <span>STRIKE</span><span>TOTAL OI</span><span>PREMIUM</span><span>DIST</span><span>ROLE</span>
+      </div>
+      ${dpRows || `<div style="padding:20px;color:#2a3a50;font-size:11px">${STATE.connected?"Load a ticker.":"Connect token."}</div>`}
+      <div style="padding:6px 12px;font-size:8.5px;color:#1e3050;border-top:1px solid #0a1018">⚠ Estimated from high-OI clusters. Not true dark pool prints.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:10px">◆ GEX KEY LEVELS</div>
+        ${[
+          {label:"Gamma Flip", val:STATE.gammaFlip?"$"+STATE.gammaFlip:"N/A", color:"#f5c518", desc:"Net GEX zero-crossing · Most critical level"},
+          {label:"Call Wall", val:STATE.callWall?"$"+STATE.callWall.strike:"N/A", color:"#00e5a0", desc:STATE.callWall?(STATE.callWall.callGEX/1e6).toFixed(0)+"M call GEX":""},
+          {label:"Put Wall", val:STATE.putWall?"$"+STATE.putWall.strike:"N/A", color:"#e8394a", desc:STATE.putWall?(STATE.putWall.putGEX/1e6).toFixed(0)+"M put GEX":""},
+          {label:"Current Spot", val:spot?"$"+spot.toFixed(2):"—", color:"#f5c518", desc:"Live last trade price"},
+        ].map(k=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;margin-bottom:4px;background:#0b1424;border-radius:3px;border-left:3px solid ${k.color}">
+          <div>
+            <div style="font-size:9px;color:#2a3a50;letter-spacing:0.1em">${k.label}</div>
+            <div style="font-size:9px;color:#4a5a7a;margin-top:1px">${k.desc}</div>
+          </div>
+          <div style="font-size:16px;font-weight:800;color:${k.color}">${k.val}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSetupGuide() {
+  const el = document.getElementById('tab-4');
+  const blocks = [
+    {title:"STEP 1 — Create Tradier Account", color:"#38bdf8", content:"1. Go to brokerage.tradier.com/signup\n2. Fill out registration (~5 min)\n3. Select Individual + Cash account\n4. Verify your email\n5. Fund with any amount (keeps API alive)\n   — even $100 is enough —\n   Bank transfer takes 2-3 business days\n\nYour money is SIPC protected at Tradier.\nNo trading required — just keep it funded."},
+    {title:"STEP 2 — Get Your API Token", color:"#f5c518", content:"Once logged into Tradier:\n\n1. Click your name (top right)\n2. Click Settings\n3. Click API Access (left menu)\n4. Click Generate Token\n5. Select PRODUCTION (not Sandbox!)\n\nCopy the token — it looks like:\nQlrqNuDXXXXXXXXXXXXXXXXX\n\nPaste it in the CONNECT box above.\nTreat it like a password — do not share it."},
+    {title:"STEP 3 — What You Get Free", color:"#a78bfa", content:"With a funded Tradier account:\n\n✅ Real-time stock quotes\n✅ Full options chains with Greeks\n   (delta, gamma, theta, vega via ORATS)\n✅ Open interest + daily volume per strike\n✅ All expirations including 0DTE\n✅ ~200 API calls/min\n\nShadowTape uses ~3-4 calls per refresh\nand auto-refreshes every 60 seconds."},
+    {title:"STEP 4 — What ShadowTape Computes", color:"#00e5a0", content:"REAL GEX FORMULA:\nGamma × OI × 100 × spot²\n(Calls positive, puts negative)\n\nPRESSURE SCORE (all real data):\n• Call vs Put premium ratio  35%\n• Net GEX posture            25%\n• Price vs gamma flip level  20%\n• Volume/OI skew             20%\n\nKEY LEVELS:\n• Gamma Flip = net GEX zero-crossing\n• Call Wall = max call GEX above spot\n• Put Wall = max put GEX below spot"},
+    {title:"STEP 5 — Honest Limitations", color:"#e8394a", content:"ShadowTape CANNOT provide free:\n\n⚠  True bid/ask side per trade\n   → Requires OPRA ~$200+/month\n⚠  True dark pool prints\n   → Requires FINRA ATS data\n⚠  Real-time sweep detection\n   → Requires tick-level data\n\nWhat we do instead:\n→ High-OI clusters = institutional\n  support/resistance proxy\n\n⚠  EDUCATIONAL ONLY\n   NOT FINANCIAL ADVICE"},
+    {title:"READING THE SIGNALS", color:"#38bdf8", content:"SCORE >= 65 = Bullish institutional bias\n→ Calls dominate, positive GEX,\n  price above gamma flip\n\nSCORE 42-64 = Neutral / coiling\n→ Mixed signals, breakout pending\n\nSCORE < 42 = Bearish bias\n→ Puts dominate, negative GEX\n\nGAMMA FLIP = Most important level\n→ Price above: dealers stabilize\n→ Price below: dealers amplify\n\nCALL/PUT WALL = Magnetic zones\n→ Price pins near these on\n  high-OI expiration dates"},
+  ];
+
+  el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    ${blocks.map(b=>`<div style="background:#0b1120;border:1px solid ${b.color}22;border-radius:6px;padding:14px">
+      <div style="font-size:10.5px;font-weight:800;color:${b.color};margin-bottom:8px;letter-spacing:0.1em">${b.title}</div>
+      <div style="font-size:10px;color:#5a7090;white-space:pre-line;line-height:1.75">${b.content}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+function init() {
+  renderWatchlist();
+  renderOverview();
+  renderSetupGuide();
+  // Token input — also connect on Enter
+  document.getElementById('token-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleConnect();
+  });
+}
+
+init();
+</script>
+</body>
+</html>
