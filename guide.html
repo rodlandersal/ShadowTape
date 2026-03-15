@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Options Beginner's Guide — ShadowTape</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#07101e;font-family:'Georgia',serif;color:#c8dff0;min-height:100vh;line-height:1.7}
+    a{color:#38bdf8;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:860px;margin:0 auto;padding:32px 24px 80px}
+    h1{font-family:'Arial',sans-serif;font-size:28px;font-weight:800;color:#dde8f5;margin:48px 0 10px;padding-bottom:10px;border-bottom:3px solid #1b6ca8;letter-spacing:0.04em}
+    h2{font-family:'Arial',sans-serif;font-size:20px;font-weight:700;color:#8db4d0;margin:36px 0 10px;letter-spacing:0.04em}
+    h3{font-family:'Arial',sans-serif;font-size:16px;font-weight:700;color:#7a9fc0;margin:24px 0 8px}
+    p{font-size:15px;color:#bdd4e8;margin:10px 0;line-height:1.8}
+    ul,ol{margin:10px 0 10px 28px}
+    li{font-size:15px;color:#bdd4e8;margin:5px 0;line-height:1.7}
+    table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+    th{background:#1e3a5f;color:#dde8f5;padding:9px 12px;text-align:left;font-family:'Arial',sans-serif;font-weight:700;letter-spacing:0.06em;font-size:12px}
+    td{padding:8px 12px;border-bottom:1px solid #0f1c30;color:#bdd4e8;vertical-align:top}
+    tr:nth-child(even) td{background:#080f1d}
+    tr:nth-child(odd) td{background:#07101e}
+    .callout{border-radius:6px;padding:16px 20px;margin:18px 0}
+    .callout-title{font-family:'Arial',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;margin-bottom:10px}
+    .callout p,.callout li{font-size:14px;margin:4px 0}
+    .blue{background:#0d1e35;border:1px solid #1b6ca833;border-left:4px solid #38bdf8}
+    .blue .callout-title{color:#38bdf8}
+    .green{background:#0a1e14;border:1px solid #1a6b4a33;border-left:4px solid #00c48c}
+    .green .callout-title{color:#00c48c}
+    .red{background:#1a0a0a;border:1px solid #8b1a1a33;border-left:4px solid #e8394a}
+    .red .callout-title{color:#e8394a}
+    .yellow{background:#1a1500;border:1px solid #8b691433;border-left:4px solid #f5c518}
+    .yellow .callout-title{color:#f5c518}
+    .st{background:#0a1828;border:1px solid #38bdf822;border-left:4px solid #38bdf8}
+    .st .callout-title{color:#38bdf8}
+    .cover{text-align:center;padding:48px 0 40px;border-bottom:1px solid #0f1c30;margin-bottom:48px}
+    .cover h1{border:none;font-size:40px;margin:0 0 8px;letter-spacing:0.08em}
+    .cover .sub{font-family:'Arial',sans-serif;font-size:16px;color:#7a9fc0;margin:6px 0}
+    .cover .warn{font-family:'Arial',sans-serif;font-size:13px;color:#e8394a;font-weight:700;margin-top:20px;padding:10px 20px;border:1px solid #e8394a33;border-radius:4px;display:inline-block}
+    .nav{position:sticky;top:0;background:#07101e;border-bottom:1px solid #0f1c30;padding:10px 24px;display:flex;gap:6px;flex-wrap:wrap;z-index:100}
+    .nav a{font-family:'Arial',sans-serif;font-size:11px;font-weight:700;color:#7a9fc0;padding:4px 10px;border:1px solid #0f1c30;border-radius:3px;letter-spacing:0.06em;white-space:nowrap}
+    .nav a:hover{color:#38bdf8;border-color:#38bdf844;text-decoration:none}
+    .back{font-family:'Arial',sans-serif;font-size:12px;color:#38bdf8;display:inline-flex;align-items:center;gap:6px;margin-bottom:32px}
+    .section-num{color:#1b6ca8;font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Arial',sans-serif}
+    .phase{border:1px solid #0f1c30;border-radius:6px;padding:16px 20px;margin:12px 0;background:#080f1d}
+    .phase-title{font-family:'Arial',sans-serif;font-size:14px;font-weight:800;color:#38bdf8;margin-bottom:8px}
+    .step{display:flex;gap:12px;margin:8px 0;align-items:flex-start}
+    .step-num{background:#1b6ca8;color:white;font-family:'Arial',sans-serif;font-size:11px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    hr{border:none;border-top:1px solid #0f1c30;margin:48px 0}
+    @media(max-width:600px){.wrap{padding:20px 16px 60px}.cover h1{font-size:28px}th,td{padding:6px 8px;font-size:12px}}
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="index.html">← Back to ShadowTape</a>
+  <a href="#s1">1. What Is an Option</a>
+  <a href="#s2">2. Strategies</a>
+  <a href="#s3">3. Start Small</a>
+  <a href="#s4">4. Schwab How-To</a>
+  <a href="#s5">5. ShadowTape Process</a>
+  <a href="#s6">6. Risk Rules</a>
+  <a href="#s7">7. Trade Walkthrough</a>
+  <a href="#s8">8. Quick Reference</a>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div style="font-family:Arial,sans-serif;font-size:13px;color:#38bdf8;letter-spacing:0.2em;margin-bottom:12px">SHADOWTAPE EDUCATION</div>
+    <h1>OPTIONS TRADING</h1>
+    <div class="sub" style="font-size:22px;font-weight:700;color:#8db4d0">BEGINNER'S COMPLETE GUIDE</div>
+    <div class="sub">Using ShadowTape to Stack the Odds in Your Favor</div>
+    <div class="sub" style="color:#4a6a8a">Built around your Charles Schwab account · Proof-of-concept first approach</div>
+    <div class="warn">⚠ EDUCATIONAL USE ONLY — NOT FINANCIAL ADVICE</div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s1">
+  <div class="section-num">SECTION 1</div>
+  <h1>What Is an Option?</h1>
+
+  <p>An option is a contract that gives you the right — but not the obligation — to buy or sell 100 shares of a stock at a specific price, before a specific date. You pay a small premium upfront for this right.</p>
+  <p>Think of it like a reservation. If you put a $50 deposit on a hotel room at a locked-in rate, you have the right to stay — but you're not forced to. If rates go up, your reservation is valuable. If rates drop, you let it expire and lose your deposit. Options work the same way.</p>
+
+  <h2>The Two Types of Options</h2>
+  <table>
+    <tr><th>TYPE</th><th>WHAT IT GIVES YOU</th><th>YOU PROFIT WHEN...</th><th>MAX LOSS</th></tr>
+    <tr><td><strong style="color:#00c48c">CALL Option</strong></td><td>Right to BUY 100 shares at the strike price</td><td>Stock price goes UP above your strike</td><td>Premium paid (cost of the contract)</td></tr>
+    <tr><td><strong style="color:#e8394a">PUT Option</strong></td><td>Right to SELL 100 shares at the strike price</td><td>Stock price goes DOWN below your strike</td><td>Premium paid (cost of the contract)</td></tr>
+  </table>
+
+  <h2>Key Terms You Must Know</h2>
+  <table>
+    <tr><th>TERM</th><th>PLAIN ENGLISH</th><th>EXAMPLE</th></tr>
+    <tr><td><strong>Strike Price</strong></td><td>The price you can buy/sell the stock at</td><td>AAPL $200 call — you can buy at $200</td></tr>
+    <tr><td><strong>Expiration Date</strong></td><td>The date the contract expires worthless if unused</td><td>March 21 — it's gone after that date</td></tr>
+    <tr><td><strong>Premium</strong></td><td>The price you pay for the option contract</td><td>$3.50 × 100 shares = $350 cost</td></tr>
+    <tr><td><strong>In The Money (ITM)</strong></td><td>Option has real intrinsic value right now</td><td>AAPL at $210, you own the $200 call</td></tr>
+    <tr><td><strong>Out of The Money (OTM)</strong></td><td>Option has no intrinsic value yet</td><td>AAPL at $190, you own the $200 call</td></tr>
+    <tr><td><strong>At The Money (ATM)</strong></td><td>Strike price equals current stock price</td><td>AAPL at $200, you own the $200 call</td></tr>
+    <tr><td><strong>Delta</strong></td><td>How much option moves per $1 move in stock</td><td>Delta 0.5 = option gains $0.50 per $1 up</td></tr>
+    <tr><td><strong>Theta</strong></td><td>Time decay — value lost per day</td><td>Theta -0.05 = option loses $5/day automatically</td></tr>
+    <tr><td><strong>IV (Implied Volatility)</strong></td><td>Market's expectation of future price swings</td><td>High IV = expensive options, more premium</td></tr>
+    <tr><td><strong>Open Interest</strong></td><td>Total open contracts at a strike</td><td>High OI = institutional interest at that level</td></tr>
+  </table>
+
+  <div class="callout blue" style="margin-top:24px">
+    <div class="callout-title">THE MOST IMPORTANT CONCEPT: OPTIONS DECAY EVERY DAY</div>
+    <p>Every single day you hold an option, it loses value from time decay (theta).</p>
+    <p>This is why <strong>BUYING options is hard</strong> — you need to be right about direction AND timing.</p>
+    <p>This is why <strong>SELLING options</strong> (covered calls, cash-secured puts) works in your favor — you collect the premium and let time decay work FOR you, not against you.</p>
+    <p style="margin-top:10px;color:#38bdf8"><strong>ShadowTape is built to help you SELL options in the right environment. That is the highest-probability strategy for a beginning trader.</strong></p>
+  </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s2">
+  <div class="section-num">SECTION 2</div>
+  <h1>Your Two Starter Strategies</h1>
+  <p>As a beginner focused on high success rate and small starting capital, you will use exactly two strategies. Both involve SELLING options — meaning you collect premium upfront and profit when the option expires worthless.</p>
+
+  <h2>Strategy 1 — Covered Call</h2>
+  <div class="callout blue">
+    <div class="callout-title">WHAT IT IS</div>
+    <ul>
+      <li>You own 100 shares of a stock</li>
+      <li>You sell someone else the right to buy your shares at a higher price by a certain date</li>
+      <li>You collect premium immediately</li>
+      <li>If stock stays below that price: you keep the premium and your shares</li>
+      <li>If stock rises above that price: you sell your shares at the strike — still profitable</li>
+    </ul>
+  </div>
+
+  <h3>Example: AAPL at $188, you own 100 shares</h3>
+  <ul>
+    <li>Sell 1 covered call at the <strong>$195 strike</strong> expiring in 2 weeks</li>
+    <li>Collect <strong>$2.50 premium = $250 cash</strong> in your account immediately</li>
+    <li>If AAPL stays below $195: expires worthless, you keep $250 ✅</li>
+    <li>If AAPL rises above $195: shares sold at $195 — still profitable from $188 ✅</li>
+  </ul>
+
+  <table style="margin-top:14px">
+    <tr><th>SCENARIO</th><th>STOCK AT EXPIRY</th><th>YOUR RESULT</th></tr>
+    <tr><td><strong style="color:#00c48c">Best case</strong></td><td>Below $195</td><td>Keep $250 premium + keep all 100 shares. Repeat next week.</td></tr>
+    <tr><td><strong style="color:#38bdf8">Good case</strong></td><td>Above $195</td><td>Shares called away at $195. Profit = ($195-$188)×100 + $250 = $950 total.</td></tr>
+    <tr><td><strong style="color:#e8394a">Bad case</strong></td><td>Drops to $175</td><td>Lost on stock but kept $250 premium — partially offsets loss.</td></tr>
+  </table>
+
+  <div class="callout st" style="margin-top:20px">
+    <div class="callout-title">🔵 SHADOWTAPE: WHEN TO SELL A COVERED CALL</div>
+    <ul>
+      <li>Pressure Score ≥ 55 (neutral to bullish)</li>
+      <li>Positive GEX — dealers dampen moves, reducing risk of sharp spike through your strike</li>
+      <li>Sell strike AT or ABOVE the <strong>Call Wall</strong> shown in ShadowTape</li>
+      <li>Sell strike above the <strong>Gamma Flip</strong> level</li>
+      <li>Avoid if Pressure Score &lt; 40 — stock may drop significantly</li>
+    </ul>
+  </div>
+
+  <h2>Strategy 2 — Cash-Secured Put (CSP)</h2>
+  <div class="callout green">
+    <div class="callout-title">WHAT IT IS</div>
+    <ul>
+      <li>You sell someone the right to SELL you 100 shares at a lower price</li>
+      <li>You collect premium immediately and keep cash as collateral</li>
+      <li>If stock stays above your strike: option expires worthless, you keep the premium ✅</li>
+      <li>If stock drops below your strike: you buy 100 shares at that price</li>
+      <li>→ This is fine if you <em>want</em> to own the stock at that price</li>
+    </ul>
+  </div>
+
+  <h3>Example: AAPL at $188</h3>
+  <ul>
+    <li>Sell 1 cash-secured put at the <strong>$180 strike</strong> expiring in 2 weeks</li>
+    <li>Keep <strong>$18,000 cash</strong> as collateral (100 × $180)</li>
+    <li>Collect <strong>$1.80 premium = $180 cash</strong> immediately</li>
+    <li>If AAPL stays above $180: expires worthless, keep $180 ✅</li>
+    <li>If AAPL drops to $175: you buy 100 shares at $180 (effective cost = $178.20) ✅</li>
+  </ul>
+
+  <table style="margin-top:14px">
+    <tr><th>SCENARIO</th><th>STOCK AT EXPIRY</th><th>YOUR RESULT</th></tr>
+    <tr><td><strong style="color:#00c48c">Best case</strong></td><td>Above $180</td><td>Keep $180 premium. Never bought shares. Repeat next week.</td></tr>
+    <tr><td><strong style="color:#38bdf8">Good case</strong></td><td>$175–$180</td><td>Buy shares at $180. Effective cost $178.20. Own quality stock at discount.</td></tr>
+    <tr><td><strong style="color:#e8394a">Bad case</strong></td><td>Drops to $160</td><td>Own shares at $178.20. Unrealized loss, but kept premium.</td></tr>
+  </table>
+
+  <div class="callout st" style="margin-top:20px">
+    <div class="callout-title">🔵 SHADOWTAPE: WHEN TO SELL A CASH-SECURED PUT</div>
+    <ul>
+      <li>Pressure Score ≥ 60 (bullish bias)</li>
+      <li>Stock price is ABOVE the Gamma Flip</li>
+      <li>Positive GEX — dealers buy dips, providing natural support</li>
+      <li>Sell strike AT or BELOW the <strong>Put Wall</strong> shown in ShadowTape</li>
+      <li>Only on stocks you genuinely want to own if assigned</li>
+      <li><strong>NEVER sell CSPs before earnings — IV crush risk is severe</strong></li>
+    </ul>
+  </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s3">
+  <div class="section-num">SECTION 3</div>
+  <h1>Proof of Concept — Starting Small</h1>
+  <p>Before risking real money, the goal is to prove the strategy works with the smallest possible positions.</p>
+
+  <div class="phase">
+    <div class="phase-title">PHASE 1 — Paper Trading (Week 1–2): Zero Risk</div>
+    <p style="font-size:14px;color:#8db4d0;margin-bottom:12px">Paper trading = pretend trades with no real money. Schwab has paper trading via StreetSmart Central.</p>
+    <div class="step"><div class="step-num">1</div><p>Open ShadowTape every morning at 9:45 AM</p></div>
+    <div class="step"><div class="step-num">2</div><p>Find a ticker with Pressure Score ≥ 60, positive GEX, above gamma flip</p></div>
+    <div class="step"><div class="step-num">3</div><p>Write down: ticker, strike you would sell, premium, expiration date</p></div>
+    <div class="step"><div class="step-num">4</div><p>Check back at expiration — did it expire worthless? Track your results</p></div>
+    <div class="step"><div class="step-num">5</div><p>After 10 paper trades with ≥70% success rate, move to Phase 2</p></div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-title">PHASE 2 — Real Money, Micro Size ($500–$1,000)</div>
+    <div class="callout blue" style="margin:0 0 12px">
+      <div class="callout-title">THE STARTER PLAYBOOK</div>
+      <ul>
+        <li>Start with ONE cash-secured put on ONE stock</li>
+        <li>Pick from Tier 1 watchlist: AAPL, MSFT, or WMT</li>
+        <li>Choose a strike AT LEAST 5% below current price (deep OTM = high success rate)</li>
+        <li>Choose expiration 14–21 days out</li>
+        <li>ONE contract at a time until you have 10 successful trades</li>
+        <li>Never risk more than $500 on a single position</li>
+      </ul>
+    </div>
+    <table>
+      <tr><th>TICKER</th><th>APPROX PRICE</th><th>COLLATERAL (1 CSP)</th><th>TARGET STRIKE</th><th>TYPICAL PREMIUM</th></tr>
+      <tr><td><strong>WMT</strong></td><td>~$85</td><td>~$7,500</td><td>5% OTM (~$80)</td><td>$50–$150</td></tr>
+      <tr><td><strong>AAPL</strong></td><td>~$185</td><td>~$17,000</td><td>5% OTM (~$175)</td><td>$100–$300</td></tr>
+      <tr><td><strong>F (Ford)</strong></td><td>~$10</td><td>~$900</td><td>5% OTM (~$9.50)</td><td>$10–$30</td></tr>
+      <tr><td><strong>AAL</strong></td><td>~$12</td><td>~$1,100</td><td>5% OTM (~$11.50)</td><td>$15–$40</td></tr>
+    </table>
+    <p style="margin-top:10px;font-size:13px;color:#7a9fc0">For small accounts ($500–$2,000), focus on F or AAL — low collateral requirement means you can participate without tying up large amounts of cash.</p>
+  </div>
+
+  <div class="phase">
+    <div class="phase-title">PHASE 3 — Scale Up (After 20 Successful Trades)</div>
+    <ul>
+      <li>Add covered calls once you own 100 shares of any position</li>
+      <li>Increase to 2–3 contracts per trade</li>
+      <li>Add a second ticker to your active rotation</li>
+      <li>Reinvest all premium collected — compound the income</li>
+    </ul>
+  </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s4">
+  <div class="section-num">SECTION 4</div>
+  <h1>How to Execute Trades on Charles Schwab</h1>
+
+  <h2>Step 1 — Get Options Approval</h2>
+  <table>
+    <tr><th>LEVEL</th><th>STRATEGIES ALLOWED</th><th>HOW TO GET IT</th></tr>
+    <tr><td><strong>Level 1</strong></td><td>Covered calls only</td><td>Automatically approved for most accounts</td></tr>
+    <tr><td><strong>Level 2</strong></td><td>Covered calls + Cash-secured puts</td><td>Accounts → Options → Apply for Options</td></tr>
+    <tr><td><strong>Level 3+</strong></td><td>Spreads, naked options</td><td>Do NOT apply for this yet</td></tr>
+  </table>
+
+  <h2>Step 2 — Selling a Cash-Secured Put</h2>
+  <div class="step"><div class="step-num">1</div><p>Log into Schwab → search your ticker → <strong>Trade → Options</strong></p></div>
+  <div class="step"><div class="step-num">2</div><p>Select expiration date (14–21 days out)</p></div>
+  <div class="step"><div class="step-num">3</div><p>Find your target strike in the <strong>Put column</strong></p></div>
+  <div class="step"><div class="step-num">4</div><p>Click the <strong>BID price</strong> (selling = you receive the bid)</p></div>
+  <div class="step"><div class="step-num">5</div><p>Order ticket: <strong>SELL TO OPEN · 1 contract · PUT · your strike · LIMIT at bid</strong></p></div>
+  <div class="step"><div class="step-num">6</div><p>Review → Place Order. Collateral is automatically held from your cash.</p></div>
+
+  <div class="callout red" style="margin-top:16px">
+    <div class="callout-title">⚠ ALWAYS USE LIMIT ORDERS — NEVER MARKET ORDERS</div>
+    <p>Market orders on options can fill at terrible prices due to wide bid/ask spreads.</p>
+    <p>Set a limit at or near the current bid. If it doesn't fill in 5 minutes, adjust down $0.05 and retry.</p>
+  </div>
+
+  <h2>Step 3 — Selling a Covered Call</h2>
+  <p>You must already own 100 shares before selling a covered call.</p>
+  <div class="step"><div class="step-num">1</div><p>Search ticker → Trade → Options → select expiration (7–21 days out)</p></div>
+  <div class="step"><div class="step-num">2</div><p>Find strike in the <strong>Call column</strong> — AT or ABOVE the ShadowTape Call Wall</p></div>
+  <div class="step"><div class="step-num">3</div><p>Click BID → Order ticket: <strong>SELL TO OPEN · CALL · your strike · LIMIT</strong></p></div>
+  <div class="step"><div class="step-num">4</div><p>Review → Place Order</p></div>
+
+  <h2>Step 4 — Closing a Position Early (Taking Profit)</h2>
+  <p>Best practice: close at <strong>50% of max premium</strong>. Don't wait for expiration.</p>
+  <div class="step"><div class="step-num">1</div><p>Positions → find your short option → Trade → <strong>BUY TO CLOSE</strong></p></div>
+  <div class="step"><div class="step-num">2</div><p>Set limit at 50% of original premium (sold $2.00 → buy back at $1.00)</p></div>
+  <div class="step"><div class="step-num">3</div><p>Place Order</p></div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s5">
+  <div class="section-num">SECTION 5</div>
+  <h1>The ShadowTape Decision Process</h1>
+  <p>This sequence takes 5–10 minutes and prevents the biggest mistakes beginners make — trading in the wrong environment.</p>
+
+  <h2>Morning Scan — Before You Trade Anything</h2>
+  <table>
+    <tr><th>#</th><th>ACTION IN SHADOWTAPE</th><th>WHAT YOU'RE LOOKING FOR</th></tr>
+    <tr><td>1</td><td>Load SPY</td><td>Is the overall market bullish, neutral, or bearish?</td></tr>
+    <tr><td>2</td><td>Check SPY Pressure Score</td><td>≥55 = proceed · 42–54 = caution · &lt;42 = do not trade today</td></tr>
+    <tr><td>3</td><td>Check SPY Gamma Flip</td><td>Price above flip = stable · Below flip = volatile day</td></tr>
+    <tr><td>4</td><td>Load QQQ</td><td>Both bullish = green light · Divergence = wait</td></tr>
+    <tr><td>5</td><td>SIGNALS tab → Run Scan</td><td>Any Blue Bar signals? Those are highest priority</td></tr>
+    <tr><td>6</td><td>SCOUT tab → Run Scout</td><td>What tickers score highest? Any new additions?</td></tr>
+    <tr><td>7</td><td>Load your target ticker</td><td>Check Pressure Score, GEX, walls individually</td></tr>
+    <tr><td>8</td><td>Volume/OI tab</td><td>Any unusual put activity near your strike?</td></tr>
+    <tr><td>9</td><td>Apply decision framework</td><td>Green / Yellow / Red light</td></tr>
+    <tr><td>10</td><td>Execute or wait</td><td>Trade with conviction or skip — no in-between</td></tr>
+  </table>
+
+  <h2>Using the Blue Bar Signal</h2>
+  <p>When ShadowTape fires a Blue Bar signal, all three conditions are simultaneously true:</p>
+  <ul>
+    <li><strong>Call V/OI &gt; 1.5</strong> — institutions opening new bullish positions today</li>
+    <li><strong>Price not extended (≤1.5% move)</strong> — pressure loading before the move</li>
+    <li><strong>Positive GEX</strong> — dealers stabilize dips, supporting your trade</li>
+  </ul>
+  <p>A Blue Bar is your highest-confidence entry. When one fires: sell a CSP at or below the Put Wall, 14–21 days out, limit order at bid. Stop: if price closes below Gamma Flip 2 days running, reassess.</p>
+
+  <div class="callout red" style="margin-top:20px">
+    <div class="callout-title">HONEST LIMITATIONS — READ THIS</div>
+    <ul>
+      <li>ShadowTape reads institutional OPTIONS flow — not stock direction guarantees</li>
+      <li>A Blue Bar means pressure is loading — it does NOT guarantee the stock will go up</li>
+      <li>GEX uses end-of-day open interest — intraday changes are not reflected</li>
+      <li>Dark Pool levels are estimated from high-OI clusters, not true dark pool data</li>
+      <li><strong>Your edge comes from consistently trading in high-probability environments — not from predicting the market</strong></li>
+    </ul>
+  </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s6">
+  <div class="section-num">SECTION 6</div>
+  <h1>Risk Management — The Rules That Protect You</h1>
+
+  <h2>Position Sizing</h2>
+  <table>
+    <tr><th>ACCOUNT SIZE</th><th>MAX PER TRADE</th><th>MAX OPEN POSITIONS</th></tr>
+    <tr><td>$500–$2,000</td><td>$500 (1 CSP on low-price stock)</td><td>1 — learn the process first</td></tr>
+    <tr><td>$2,000–$5,000</td><td>$1,500</td><td>2</td></tr>
+    <tr><td>$5,000–$10,000</td><td>$2,500</td><td>3</td></tr>
+    <tr><td>$10,000+</td><td>5% of account</td><td>4–5</td></tr>
+  </table>
+
+  <h2>The 5 Unbreakable Rules</h2>
+  <div class="callout red"><div class="callout-title">RULE 1 — NEVER trade before earnings</div><p>Options premiums explode before earnings then collapse immediately after (IV crush). Check earnings dates on Schwab before every trade. No exceptions.</p></div>
+  <div class="callout green"><div class="callout-title">RULE 2 — NEVER use margin</div><p>Cash-secured puts require CASH collateral. Never borrow to fund them. Margin amplifies losses. You are building sustainable income, not gambling.</p></div>
+  <div class="callout blue"><div class="callout-title">RULE 3 — NEVER sell options when SPY score is below 40</div><p>A bearish market means your puts are at high risk. Wait for the environment to improve. Missing a trade is free. Losses cost real money.</p></div>
+  <div class="callout yellow"><div class="callout-title">RULE 4 — Close at 50% profit — always</div><p>If you sold a put for $2.00, close it when it reaches $1.00. Taking 50% removes all risk and frees capital. The last 50% of profit takes 80% of the time and risk.</p></div>
+  <div class="callout green"><div class="callout-title">RULE 5 — If assigned, do not panic</div><p>If your put gets assigned, you now own 100 shares at your strike price. This is fine if you chose a quality stock. Immediately sell a covered call on your new shares. This is called the <strong>Wheel Strategy</strong>.</p></div>
+
+  <h2>The Wheel Strategy</h2>
+  <div class="callout blue">
+    <div class="callout-title">CONTINUOUS INCOME LOOP</div>
+    <p><strong>STEP 1:</strong> Sell a cash-secured put below current price → collect premium</p>
+    <p style="margin-left:16px;color:#7a9fc0">If expires worthless → repeat Step 1</p>
+    <p style="margin-left:16px;color:#7a9fc0">If assigned → move to Step 2</p>
+    <br/>
+    <p><strong>STEP 2:</strong> You own 100 shares → sell a covered call above current price → collect premium</p>
+    <p style="margin-left:16px;color:#7a9fc0">If expires worthless → repeat Step 2</p>
+    <p style="margin-left:16px;color:#7a9fc0">If called away → move back to Step 1</p>
+    <br/>
+    <p style="color:#38bdf8"><strong>Result: Continuously collecting premium whether the stock goes up, sideways, or slightly down.</strong></p>
+  </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s7">
+  <div class="section-num">SECTION 7</div>
+  <h1>Full Trade Walkthrough</h1>
+
+  <h2>The Setup</h2>
+  <table>
+    <tr><th>DETAIL</th><th>VALUE</th></tr>
+    <tr><td>Ticker</td><td><strong>WMT (Walmart)</strong></td></tr>
+    <tr><td>Current price</td><td>$86.50</td></tr>
+    <tr><td>Strategy</td><td>Cash-Secured Put</td></tr>
+    <tr><td>Account size</td><td>$5,000</td></tr>
+  </table>
+
+  <h2>Step 1 — Morning ShadowTape Check</h2>
+  <table>
+    <tr><th>CHECK</th><th>RESULT</th><th>SIGNAL</th></tr>
+    <tr><td>SPY Pressure Score</td><td>68</td><td style="color:#00c48c">✅ Bullish</td></tr>
+    <tr><td>SPY above Gamma Flip?</td><td>Yes — $502 vs flip at $494</td><td style="color:#00c48c">✅ Stable</td></tr>
+    <tr><td>QQQ confirms?</td><td>Score 64, bullish</td><td style="color:#00c48c">✅ Aligned</td></tr>
+    <tr><td>WMT Pressure Score</td><td>61</td><td style="color:#00c48c">✅ Bullish</td></tr>
+    <tr><td>WMT GEX</td><td>Positive +0.8B</td><td style="color:#00c48c">✅ Stabilizing</td></tr>
+    <tr><td>WMT Gamma Flip</td><td>$83.50 — WMT at $86.50 (above)</td><td style="color:#00c48c">✅ Safe zone</td></tr>
+    <tr><td>WMT Put Wall</td><td>$84.00</td><td style="color:#00c48c">✅ Natural support</td></tr>
+    <tr><td>Earnings?</td><td>8 weeks away</td><td style="color:#00c48c">✅ Safe</td></tr>
+  </table>
+  <p style="color:#00c48c;font-weight:700;margin-top:10px">Decision: GREEN LIGHT. All signals aligned. Proceeding.</p>
+
+  <h2>Step 2 — Strike Selection</h2>
+  <ul>
+    <li>Put Wall at $84.00 — sell below this level</li>
+    <li>Choose the <strong>$83 strike</strong> — below put wall, 4% OTM, strong GEX support</li>
+    <li>Expiration: <strong>16 days out</strong></li>
+    <li>Bid on the $83 put: <strong>$0.75 = $75 per contract</strong></li>
+    <li>Collateral required: $83 × 100 = $8,300</li>
+  </ul>
+
+  <h2>Step 3 — Execute on Schwab</h2>
+  <p>WMT → Trade → Options → $83 Put → SELL TO OPEN · 1 contract · LIMIT $0.75 → Place Order</p>
+  <p style="color:#00c48c">$75 premium credited to account immediately ✅</p>
+
+  <h2>Step 4 — Managing the Trade</h2>
+  <table>
+    <tr><th>DAY</th><th>WMT PRICE</th><th>PUT VALUE</th><th>ACTION</th></tr>
+    <tr><td>Entry</td><td>$86.50</td><td>$0.75</td><td>Sold. $75 credited. $8,300 held as collateral.</td></tr>
+    <tr><td>Day 5</td><td>$87.20</td><td>$0.45</td><td>Up 40% profit. Continue holding — target is 50%.</td></tr>
+    <tr><td>Day 8</td><td>$88.10</td><td>$0.38</td><td style="color:#00c48c"><strong>At 50% profit. CLOSE THE TRADE.</strong></td></tr>
+    <tr><td>Close</td><td>$88.10</td><td>$0.37</td><td>BUY TO CLOSE at $0.37. Profit = $0.75 - $0.37 = $38.</td></tr>
+  </table>
+  <p style="margin-top:12px;color:#38bdf8"><strong>$38 profit · 8 days · $8,300 collateral = 0.46% return. Annualized ≈ 21% per year.</strong></p>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════ -->
+  <div id="s8">
+  <div class="section-num">SECTION 8</div>
+  <h1>Quick Reference Card</h1>
+
+  <div class="callout blue">
+    <div class="callout-title">PRE-TRADE CHECKLIST — Run this every single time</div>
+    <ul>
+      <li>☐ SPY Pressure Score ≥ 55</li>
+      <li>☐ SPY price above SPY Gamma Flip</li>
+      <li>☐ QQQ confirms (also bullish or neutral)</li>
+      <li>☐ Target ticker Pressure Score ≥ 60</li>
+      <li>☐ Target ticker above its own Gamma Flip</li>
+      <li>☐ GEX is positive on target ticker</li>
+      <li>☐ Strike is below Put Wall (CSP) or above Call Wall (covered call)</li>
+      <li>☐ No earnings within 2 weeks</li>
+      <li>☐ No major macro event this week (FOMC, CPI)</li>
+      <li>☐ Position size ≤ 5% of account</li>
+      <li>☐ Using LIMIT order, not market order</li>
+    </ul>
+  </div>
+
+  <table style="margin-top:20px">
+    <tr><th>SIGNAL</th><th>BULLISH READING</th><th>BEARISH READING</th><th>ACTION</th></tr>
+    <tr><td><strong>Pressure Score</strong></td><td>≥65</td><td>&lt;42</td><td>&lt;42 = no new trades</td></tr>
+    <tr><td><strong>Gamma Flip</strong></td><td>Price above flip</td><td>Price below flip</td><td>Below = reduce size</td></tr>
+    <tr><td><strong>GEX Posture</strong></td><td>Positive</td><td>Negative</td><td>Negative = caution</td></tr>
+    <tr><td><strong>Blue Bar</strong></td><td>All 3 conditions met</td><td>Conditions unmet</td><td>Active = highest priority</td></tr>
+    <tr><td><strong>C/P Premium</strong></td><td>Calls dominate</td><td>Puts dominate</td><td>Puts dominate = wait</td></tr>
+  </table>
+
+  <div class="callout red" style="margin-top:20px">
+    <div class="callout-title">NEVER TRADE WHEN:</div>
+    <ul>
+      <li>✗ Earnings within 2 weeks on your target stock</li>
+      <li>✗ SPY Pressure Score below 40</li>
+      <li>✗ SPY is below its Gamma Flip</li>
+      <li>✗ FOMC meeting or CPI release this week</li>
+      <li>✗ You are acting on emotion or FOMO</li>
+      <li>✗ You don't have time to monitor the position</li>
+      <li>✗ The trade requires margin or borrowed money</li>
+    </ul>
+  </div>
+
+  <div class="callout green" style="margin-top:20px">
+    <div class="callout-title">THE PROCESS IN ONE SENTENCE</div>
+    <p>Use ShadowTape every morning to confirm the environment is favorable, then sell one cash-secured put below the Put Wall on a high-scoring ticker, close at 50% profit, repeat — let compounding do the rest.</p>
+  </div>
+
+  <div style="text-align:center;margin-top:60px;padding:24px;border:1px solid #e8394a33;border-radius:6px">
+    <div style="font-size:14px;font-weight:700;color:#e8394a;margin-bottom:8px">⚠ IMPORTANT DISCLAIMER</div>
+    <p style="font-size:13px;color:#7a9fc0;font-style:italic">This guide is for educational purposes only. Nothing here constitutes financial advice.</p>
+    <p style="font-size:13px;color:#7a9fc0;font-style:italic">Options trading involves substantial risk of loss. Consult a licensed financial advisor before trading.</p>
+  </div>
+
+  </div>
+</div>
+</body>
+</html>

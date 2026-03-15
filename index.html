@@ -6,7 +6,7 @@
   <title>ShadowTape — Institutional Pressure Intelligence</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#07101e;font-family:'Courier New',monospace;color:#8899bb;min-height:100vh}
+    body{background:#07101e;font-family:'Courier New',monospace;color:#aabbd8;min-height:100vh}
     button{cursor:pointer;font-family:'Courier New',monospace}
     input{font-family:'Courier New',monospace}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
@@ -17,13 +17,13 @@
     ::-webkit-scrollbar-track{background:#07101e}
     ::-webkit-scrollbar-thumb{background:#0f1c30;border-radius:3px}
     .dot{width:6px;height:6px;border-radius:50%;background:#00e5a0;animation:blink 2s infinite;display:inline-block}
-    .tab-btn{padding:9px 16px;background:none;border:none;border-bottom:2px solid transparent;color:#2a3a50;font-size:9.5px;font-weight:700;letter-spacing:0.12em;transition:color 0.2s;white-space:nowrap}
-    .tab-btn.active{border-bottom:2px solid #38bdf8;color:#38bdf8}
-    .tab-btn:hover{color:#5a7090}
+    .tab-btn{padding:9px 16px;background:none;border:none;border-bottom:2px solid transparent;color:#8db4d0;font-size:9.5px;font-weight:700;letter-spacing:0.12em;transition:color 0.2s;white-space:nowrap}
+    .tab-btn.active{border-bottom:2px solid #38bdf8;color:#7dd8fc}
+    .tab-btn:hover{color:#bdd4e8}
     .ticker-card{padding:8px 12px;border-radius:4px;border:1px solid #0f1c30;background:#080f1d;min-width:90px;flex-shrink:0;cursor:default;transition:all 0.2s}
     .ticker-card.active{border:1px solid rgba(56,189,248,0.33);background:rgba(56,189,248,0.03)}
     .ticker-card.clickable{cursor:pointer}
-    .progress-bar{height:4px;background:#0b1424;border-radius:2px;margin-top:3px}
+    .progress-bar{height:4px;background:#1a2e45;border-radius:2px;margin-top:3px}
     .progress-fill{height:100%;border-radius:2px;transition:width 0.8s}
     #error-banner{display:none;padding:8px 20px;background:#1a0a0a;border-bottom:1px solid #e8394a22;font-size:10px;color:#e8394a}
     #status-msg{color:#e8394a;font-size:10px;margin-top:8px;display:none}
@@ -47,7 +47,7 @@
   <!-- HEADER -->
   <div style="background:#07101e;border-bottom:1px solid #0f1c30;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
     <div style="display:flex;align-items:center;gap:14px">
-      <div style="width:34px;height:34px;border-radius:4px;background:linear-gradient(135deg,#0d1f35,#07101e);border:1px solid #1a3050;display:flex;align-items:center;justify-content:center">
+      <div style="width:34px;height:34px;border-radius:4px;background:linear-gradient(135deg,#0d1f35,#07101e);border:1px solid #7a9fc0;display:flex;align-items:center;justify-content:center">
         <svg width="20" height="20" viewBox="0 0 20 20">
           <line x1="2" y1="10" x2="18" y2="10" stroke="#38bdf8" stroke-width="1" opacity="0.3"/>
           <polyline points="2,13 5,7 8,11 11,5 14,12 17,8" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
@@ -56,13 +56,13 @@
       </div>
       <div>
         <div style="font-size:15px;font-weight:800;color:#dde8f5;letter-spacing:0.18em">SHADOW<span style="color:#38bdf8">TAPE</span></div>
-        <div style="font-size:8px;color:#1a3050;letter-spacing:0.22em;margin-top:1px">INSTITUTIONAL PRESSURE INTELLIGENCE · TRADIER API</div>
+        <div style="font-size:8px;color:#7a9fc0;letter-spacing:0.22em;margin-top:1px">INSTITUTIONAL PRESSURE INTELLIGENCE · TRADIER API</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;font-size:9.5px">
-      <div id="conn-status" style="color:#1e3050">NOT CONNECTED</div>
-      <button id="refresh-btn" onclick="refreshData()" style="display:none;padding:4px 12px;background:#0f1c2e;border:1px solid #1e3050;border-radius:3px;color:#38bdf8;font-size:9.5px">↺ REFRESH</button>
-      <button id="forget-btn" onclick="forgetToken()" style="display:none;padding:4px 10px;background:none;border:1px solid #1e2535;border-radius:3px;color:#2a3a50;font-size:9px">FORGET TOKEN</button>
+      <div id="conn-status" style="color:#7a9fc0">NOT CONNECTED</div>
+      <button id="refresh-btn" onclick="refreshData()" style="display:none;padding:4px 12px;background:#0f1c2e;border:1px solid #7a9fc0;border-radius:3px;color:#38bdf8;font-size:9.5px">↺ REFRESH</button>
+      <button id="forget-btn" onclick="forgetToken()" style="display:none;padding:4px 10px;background:none;border:1px solid #6a8aaa;border-radius:3px;color:#8db4d0;font-size:9px">FORGET TOKEN</button>
     </div>
   </div>
 
@@ -71,9 +71,9 @@
     <div style="font-size:10px;color:#38bdf8;margin-bottom:8px;font-weight:700;letter-spacing:0.1em">▶ CONNECT YOUR TRADIER PRODUCTION API TOKEN</div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <input id="token-input" type="password" placeholder="Paste Tradier Production token here..."
-        style="flex:1;min-width:280px;max-width:480px;padding:9px 13px;background:#0b1424;border:1px solid #2a4060;border-radius:3px;color:#dde8f5;font-size:12px;outline:none"/>
+        style="flex:1;min-width:280px;max-width:480px;padding:9px 13px;background:#0b1424;border:1px solid #7a9fc0;border-radius:3px;color:#dde8f5;font-size:12px;outline:none"/>
       <button onclick="handleConnect()" style="padding:9px 22px;background:#38bdf811;border:1px solid #38bdf8;border-radius:3px;color:#38bdf8;font-size:11px;font-weight:700">CONNECT →</button>
-      <button onclick="showTab(6)" style="padding:9px 14px;background:none;border:1px solid #1e3050;border-radius:3px;color:#5a7090;font-size:10px">SETUP GUIDE</button>
+      <button onclick="showTab(6)" style="padding:9px 14px;background:none;border:1px solid #7a9fc0;border-radius:3px;color:#bdd4e8;font-size:10px">SETUP GUIDE</button>
     </div>
     <div id="status-msg"></div>
   </div>
@@ -93,6 +93,7 @@
     <button class="tab-btn" onclick="showTab(4)" id="signals-tab-btn">🔵 SIGNALS</button>
     <button class="tab-btn" onclick="showTab(5)">🔍 SCOUT</button>
     <button class="tab-btn" onclick="showTab(6)">SETUP GUIDE</button>
+    <a href="guide.html" target="_blank" style="padding:9px 16px;background:none;border:none;border-bottom:2px solid transparent;color:#f5c518;font-size:9.5px;font-weight:700;letter-spacing:0.12em;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:5px" onmouseover="this.style.color='#f5c518aa'" onmouseout="this.style.color='#f5c518'">📖 BEGINNER'S GUIDE ↗</a>
   </div>
 
   <div id="error-banner"></div>
@@ -107,7 +108,7 @@
     <div id="tab-6" style="display:none"></div>
   </div>
 
-  <div style="padding:7px 20px;border-top:1px solid #0a1018;font-size:8.5px;color:#1a2535;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px">
+  <div style="padding:7px 20px;border-top:1px solid #1a2a3a;font-size:8.5px;color:#6a8aaa;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px">
     <span>SHADOWTAPE · TRADIER API · CLOUDFLARE WORKER · GEX ENGINE v2</span>
     <span>⚠ EDUCATIONAL TOOL — NOT FINANCIAL ADVICE</span>
   </div>
@@ -251,8 +252,8 @@ function calcDPLevels(strikes, spot) {
 function detectBlueBar(ticker, strikes, spot, quote, gflip) {
   // Three conditions must ALL align:
   // 1. Call premium spike: weighted V/OI > 1.5 on calls
-  // 2. Price flat: change_percentage within ±0.8% (pressure loading before move)
-  // 3. GEX positive AND price above gamma flip
+  // 2. Price not extended: change_percentage within ±1.5%
+  // 3. Positive GEX (above gamma flip = bonus, not hard requirement)
 
   const callVol = strikes.reduce((s,x)=>s+x.callVol,0);
   const callOI  = strikes.reduce((s,x)=>s+x.callOI,0);
@@ -267,10 +268,12 @@ function detectBlueBar(ticker, strikes, spot, quote, gflip) {
   const cpRatio = pp > 0 ? cp/pp : 1;
 
   const cond1 = cVOI > 1.5;                          // Call flow spike
-  const cond2 = chg <= 0.8;                           // Price still flat
-  const cond3 = ng > 0 && gflip && spot > gflip;     // Positive GEX above flip
+  const cond2 = chg <= 1.5;                           // Price not extended (loosened from 0.8%)
+  const cond3 = ng > 0;                               // Positive GEX (gamma flip is advisory, not hard block)
+  const aboveFlip = gflip && spot > gflip;            // Bonus: above gamma flip (shown in detail)
 
-  const strength = (cond1 ? 40 : 0) + (cond2 ? 20 : 0) + (cond3 ? 40 : 0);
+  // Strength: cond1+cond3 are primary (40pts each), cond2 secondary (20pts), flip bonus (10pts)
+  const strength = (cond1 ? 40 : 0) + (cond2 ? 20 : 0) + (cond3 ? 40 : 0) + (aboveFlip ? 10 : 0);
   const fired = cond1 && cond2 && cond3;
 
   // Find hottest call strike (highest V/OI above spot)
@@ -290,7 +293,7 @@ function detectBlueBar(ticker, strikes, spot, quote, gflip) {
   const putStrike = pwall ? Math.floor(pwall.strike * 0.995 / (spot > 100 ? 5 : 1)) * (spot > 100 ? 5 : 1) : null;
 
   return {
-    ticker, fired, strength, cond1, cond2, cond3,
+    ticker, fired, strength, cond1, cond2, cond3, aboveFlip,
     cVOI: +cVOI.toFixed(2), pVOI: +pVOI.toFixed(2),
     cpRatio: +cpRatio.toFixed(2),
     callPrem: cp, putPrem: pp,
@@ -309,9 +312,26 @@ async function runScout() {
   STATE.scoutLoading = true;
   renderScout();
 
-  const tickers = ["SPY","QQQ","AAPL","MSFT","AMZN","GOOGL","NVDA","META","TSLA",
-                   "PLTR","AMD","SMCI","VZ","WMT","COP","JPM","GS","XOM","JEPI","SOFI",
-                   "MSTR","COIN","HOOD","BAC","DIS","NFLX","UBER","MU","ARM","AVGO"];
+  // Expanded to 65 tickers across large cap, mid cap, and lower-priced opportunities
+  const tickers = [
+    // Mega cap / Index
+    "SPY","QQQ","AAPL","MSFT","AMZN","GOOGL","NVDA","META","TSLA","AVGO",
+    // Financials
+    "JPM","GS","BAC","C","MS","WFC","BRK.B",
+    // Tech / Growth
+    "AMD","ARM","MU","SMCI","ORCL","CRM","UBER","NFLX","DIS",
+    // Institutional flow favorites
+    "PLTR","MSTR","COIN","HOOD","SOFI",
+    // Energy / Commodities
+    "XOM","COP","CVX","OXY",
+    // Defensive / Income
+    "VZ","WMT","T","KO","PFE","JEPI","JEPQ",
+    // Lower priced high-opportunity (under ~$50)
+    "F","AAL","CCL","SNAP","RIVN","LCID","NIO","XPEV","GRAB","NU",
+    "VALE","ITUB","PBR","GOLD","AG",
+    // Mid cap with good options flow
+    "RBLX","DKNG","PENN","SQ","SHOP","ABNB","LYFT","ROKU","IONQ",
+  ];
   const results = [];
 
   for (const t of tickers) {
@@ -354,15 +374,16 @@ async function runScout() {
 
       // Best strategy recommendation
       let strategy = "OBSERVE";
-      let stratColor = "#5a7090";
+      let stratColor = "#bdd4e8";
       if (totalScore >= 70 && ng > 0 && ps >= 60) { strategy = "SELL PUTS"; stratColor = "#00e5a0"; }
       else if (totalScore >= 60 && ps >= 55) { strategy = "COVERED CALLS"; stratColor = "#38bdf8"; }
       else if (totalScore >= 50) { strategy = "MONITOR"; stratColor = "#f5c518"; }
 
       const bb = detectBlueBar(t, strikes, spot, q, gflip);
 
+      const priceTier = spot < 20 ? "MICRO" : spot < 50 ? "LOW" : spot < 200 ? "MID" : "HIGH";
       results.push({
-        ticker: t, score: totalScore, ps, ng, gflip, spot,
+        ticker: t, score: totalScore, ps, ng, gflip, spot, priceTier,
         liqScore: Math.round(liqScore), gexScore, premScore: Math.round(premScore),
         flowScore: Math.round(flowScore), strategy, stratColor,
         cVOI: +cVOI.toFixed(2), cp, pp, totalOI,
@@ -433,7 +454,7 @@ function setStatus(msg, color) {
 }
 
 function scoreColor(s) { return s>=65?"#00e5a0":s>=42?"#f5c518":"#e8394a"; }
-function tierColor(t) { return TIER_COLORS[t]||"#5a7090"; }
+function tierColor(t) { return TIER_COLORS[t]||"#bdd4e8"; }
 function fmtM(v) { return "$"+(v/1000000).toFixed(2)+"M"; }
 function fmtB(v) { return (v>0?"+":"")+(v/1e9).toFixed(2)+"B"; }
 
@@ -564,19 +585,19 @@ function renderWatchlist() {
   WATCHLIST.forEach(t => {
     const meta = TICKER_META[t];
     const d = STATE.watchlistData[t];
-    const tc = meta ? tierColor(meta.tier) : "#5a7090";
+    const tc = meta ? tierColor(meta.tier) : "#bdd4e8";
     const isSel = t===STATE.selectedTicker;
     const isPos = d ? d.chg >= 0 : true;
     html += `<div class="ticker-card${isSel?' active':''} clickable" onclick="selectTicker('${t}')"
       style="border-color:${isSel?tc+'55':'#0f1c30'};background:${isSel?tc+'08':'#080f1d'}">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
-        <span style="font-size:12px;font-weight:700;color:${isSel?'#dde8f5':'#5a7090'}">${t}</span>
+        <span style="font-size:12px;font-weight:700;color:${isSel?'#dde8f5':'#bdd4e8'}">${t}</span>
         ${meta?`<span style="font-size:7.5px;color:${tc};font-weight:700">${meta.tier}</span>`:''}
       </div>
-      ${meta?`<div style="font-size:7.5px;color:#2a3a50;margin-top:1px">${meta.role}</div>`:''}
-      ${d?`<div style="font-size:10px;color:#8899bb;margin-top:2px">$${parseFloat(d.last).toFixed(2)}</div>
+      ${meta?`<div style="font-size:7.5px;color:#8db4d0;margin-top:1px">${meta.role}</div>`:''}
+      ${d?`<div style="font-size:10px;color:#aabbd8;margin-top:2px">$${parseFloat(d.last).toFixed(2)}</div>
            <div style="font-size:9px;color:${isPos?'#00e5a0':'#e8394a'};margin-top:1px">${isPos?'▲':'▼'}${Math.abs(d.chg).toFixed(2)}%</div>`
-         :`<div style="font-size:9px;color:#1e3050;margin-top:2px">— awaiting</div>`}
+         :`<div style="font-size:9px;color:#7a9fc0;margin-top:2px">— awaiting</div>`}
       <div class="progress-bar"><div class="progress-fill" style="width:${isSel?'100%':'0%'};background:${tc}"></div></div>
     </div>`;
   });
@@ -584,7 +605,7 @@ function renderWatchlist() {
   Object.entries(TIER_COLORS).forEach(([tier,color]) => {
     html += `<div style="display:flex;align-items:center;gap:4px">
       <div style="width:6px;height:6px;border-radius:50%;background:${color}"></div>
-      <span style="font-size:8px;color:#2a3a50">${tier}</span></div>`;
+      <span style="font-size:8px;color:#8db4d0">${tier}</span></div>`;
   });
   html += '</div>';
   strip.innerHTML = html;
@@ -597,7 +618,7 @@ function renderTickerHeader() {
   el.style.display='flex'; el.style.flexWrap='wrap'; el.style.gap='24px'; el.style.alignItems='flex-start';
   const q = STATE.quote, spot = parseFloat(q.last);
   const meta = TICKER_META[STATE.selectedTicker];
-  const tc = meta ? tierColor(meta.tier) : "#5a7090";
+  const tc = meta ? tierColor(meta.tier) : "#bdd4e8";
   const sc = STATE.pressureScore, scorecol = scoreColor(sc);
   const ngB = STATE.netGEX/1e9;
   const posture = ngB>0.3?"POSITIVE":ngB<-0.3?"NEGATIVE":"NEUTRAL";
@@ -609,20 +630,20 @@ function renderTickerHeader() {
   const bx=cx+r*Math.cos(ea),by=cy+r*Math.sin(ea);
   const la=arc*(sc/100)>Math.PI?1:0;
   let expBtns = STATE.expirations.slice(0,6).map(exp =>
-    `<button onclick="selectExp('${exp}')" style="padding:2px 8px;font-size:9px;background:${exp===STATE.selectedExp?'#38bdf811':'#0b1424'};border:1px solid ${exp===STATE.selectedExp?'#38bdf844':'#1e3050'};border-radius:2px;color:${exp===STATE.selectedExp?'#38bdf8':'#4a5a7a'}">${exp}</button>`
+    `<button onclick="selectExp('${exp}')" style="padding:2px 8px;font-size:9px;background:${exp===STATE.selectedExp?'#38bdf811':'#0b1424'};border:1px solid ${exp===STATE.selectedExp?'#38bdf844':'#7a9fc0'};border-radius:2px;color:${exp===STATE.selectedExp?'#38bdf8':'#aacde0'}">${exp}</button>`
   ).join('');
   el.innerHTML = `
     <div>
       <div style="font-size:26px;font-weight:800;color:#dde8f5;letter-spacing:0.06em">${STATE.selectedTicker}</div>
       ${meta?`<div style="display:flex;gap:6px;align-items:center;margin-bottom:2px">
         <span style="font-size:9px;font-weight:700;color:${tc}">${meta.tier}</span>
-        <span style="font-size:9px;color:#2a3a50">·</span>
-        <span style="font-size:9px;color:#3a5070">${meta.role}</span>
+        <span style="font-size:9px;color:#8db4d0">·</span>
+        <span style="font-size:9px;color:#9ab8d0">${meta.role}</span>
       </div>`:''}
       <div style="font-size:22px;color:#f5c518;font-weight:700">$${spot.toFixed(2)}</div>
       <div style="font-size:11px;color:${q.change_percentage>=0?'#00e5a0':'#e8394a'};margin-top:2px">
         ${q.change_percentage>=0?'▲':'▼'} ${Math.abs(q.change_percentage).toFixed(2)}%
-        <span style="color:#1e3050;margin-left:8px">Vol ${(q.volume/1000000).toFixed(2)}M</span>
+        <span style="color:#7a9fc0;margin-left:8px">Vol ${(q.volume/1000000).toFixed(2)}M</span>
       </div>
       <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">${expBtns}</div>
     </div>
@@ -631,7 +652,7 @@ function renderTickerHeader() {
         <path d="M ${sx} ${sy} A ${r} ${r} 0 1 1 ${bx} ${by}" fill="none" stroke="#1c2535" stroke-width="11" stroke-linecap="round"/>
         <path d="M ${sx} ${sy} A ${r} ${r} 0 ${la} 1 ${ex} ${ey}" fill="none" stroke="${scorecol}" stroke-width="11" stroke-linecap="round"/>
         <text x="${cx}" y="${cy-4}" text-anchor="middle" fill="${scorecol}" font-size="24" font-weight="800" font-family="monospace">${sc}</text>
-        <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="#334155" font-size="9" font-family="monospace">PRESSURE</text>
+        <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="#7a9ab5" font-size="9" font-family="monospace">PRESSURE</text>
       </svg>
       <div style="font-size:9px;font-weight:700;color:${scorecol};letter-spacing:0.14em;margin-top:-6px">${sc>=65?'BULLISH':sc>=42?'NEUTRAL':'BEARISH'}</div>
     </div>
@@ -644,15 +665,15 @@ function renderTickerHeader() {
       ${statBox("Gamma Flip",STATE.gammaFlip?"$"+STATE.gammaFlip:"—","#f5c518",STATE.gammaFlip?(spot>STATE.gammaFlip?"↑ ABOVE":"↓ BELOW"):"")}
       ${statBox("Call Wall",STATE.callWall?"$"+STATE.callWall.strike:"—","#00e5a0","Resistance")}
       ${statBox("Put Wall",STATE.putWall?"$"+STATE.putWall.strike:"—","#e8394a","Support")}
-      ${statBox("Expiration",STATE.selectedExp||"—","#5a7090",STATE.gexStrikes.length+" strikes")}
+      ${statBox("Expiration",STATE.selectedExp||"—","#bdd4e8",STATE.gexStrikes.length+" strikes")}
     </div>`;
 }
 
 function statBox(label,value,color,sub) {
   return `<div style="border-left:2px solid ${color}33;padding-left:8px">
-    <div style="font-size:8.5px;color:#334155;letter-spacing:0.1em">${label}</div>
+    <div style="font-size:8.5px;color:#7a9ab5;letter-spacing:0.1em">${label}</div>
     <div style="font-size:13px;font-weight:700;color:${color};margin-top:1px">${value}</div>
-    ${sub?`<div style="font-size:8.5px;color:#4a5a7a;margin-top:1px">${sub}</div>`:''}
+    ${sub?`<div style="font-size:8.5px;color:#aacde0;margin-top:1px">${sub}</div>`:''}
   </div>`;
 }
 
@@ -660,7 +681,7 @@ function statBox(label,value,color,sub) {
 function renderOverview() {
   const el = document.getElementById('tab-0');
   if (!STATE.connected||!STATE.quote) {
-    el.innerHTML = watchlistGrid()+`<div style="margin-top:14px;padding:20px;background:#080f1d;border:1px solid #0f1c30;border-radius:5px;color:#2a3a50;font-size:11px">Connect your Tradier Production token to see live institutional pressure analysis.</div>`;
+    el.innerHTML = watchlistGrid()+`<div style="margin-top:14px;padding:20px;background:#080f1d;border:1px solid #0f1c30;border-radius:5px;color:#8db4d0;font-size:11px">Connect your Tradier Production token to see live institutional pressure analysis.</div>`;
     return;
   }
   const spot=parseFloat(STATE.quote.last), sc=STATE.pressureScore, scorecol=scoreColor(sc);
@@ -678,8 +699,8 @@ function renderOverview() {
     const c=s.val>=60?"#00e5a0":s.val>=45?"#f5c518":"#e8394a";
     return `<div style="margin-bottom:8px">
       <div style="display:flex;justify-content:space-between;font-size:9.5px;margin-bottom:3px">
-        <span style="color:#5a7090">${s.label}</span>
-        <span style="color:#2a3a50">weight ${s.w}</span>
+        <span style="color:#bdd4e8">${s.label}</span>
+        <span style="color:#8db4d0">weight ${s.w}</span>
         <span style="color:${c};font-weight:700">${s.val}/100</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${s.val}%;background:${c}"></div></div>
@@ -690,44 +711,44 @@ function renderOverview() {
   el.innerHTML = watchlistGrid()+`
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
     <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:16px">
-      <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.14em;margin-bottom:12px">◆ INSTITUTIONAL PRESSURE — ${STATE.selectedTicker}</div>
+      <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.14em;margin-bottom:12px">◆ INSTITUTIONAL PRESSURE — ${STATE.selectedTicker}</div>
       <div style="padding:14px;border-radius:4px;margin-bottom:12px;background:rgba(${sc>=65?"0,229,160":sc>=42?"245,197,24":"232,57,74"},0.05);border:1px solid ${scorecol}22">
         <div style="font-size:12px;font-weight:700;color:${scorecol};margin-bottom:6px">
           ${sc>=70?"🟢 STRONG BULLISH":sc>=55?"🟡 MODERATE BULLISH":sc>=45?"⚪ NEUTRAL — COILING":sc>=30?"🟠 MODERATE BEARISH":"🔴 SIGNIFICANT BEARISH FLOW"}
         </div>
-        <div style="font-size:10px;color:#4a5a7a;line-height:1.7">
+        <div style="font-size:10px;color:#aacde0;line-height:1.7">
           Call premium ${STATE.totalCallPrem>STATE.totalPutPrem?"DOMINATES":"TRAILS"} (${(STATE.totalCallPrem/(STATE.totalPutPrem+1)).toFixed(2)}x).
           GEX posture <span style="color:${gcol}">${posture}</span> —
           ${ngB>0.3?"dealer hedging stabilizes price near strikes.":ngB<-0.3?"dealers amplify directional moves.":"mixed hedging pressure."}
           ${flip?" Gamma flip $"+flip+": price "+regime:""}
         </div>
       </div>
-      <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:8px">SIGNAL COMPONENTS</div>
+      <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.12em;margin-bottom:8px">SIGNAL COMPONENTS</div>
       ${sigHtml}
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
-        <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:10px">◆ PREMIUM FLOW</div>
+        <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.12em;margin-bottom:10px">◆ PREMIUM FLOW</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div style="padding:10px;background:#00e5a005;border:1px solid #00e5a022;border-radius:3px">
             <div style="color:#00e5a0;font-weight:700;font-size:13px;margin-bottom:4px">CALLS</div>
             <div style="color:#f5c518;font-weight:700">${fmtM(STATE.totalCallPrem)}</div>
-            <div style="color:#4a5a7a;font-size:9.5px;margin-top:3px">${callOIT.toLocaleString()} OI</div>
+            <div style="color:#aacde0;font-size:9.5px;margin-top:3px">${callOIT.toLocaleString()} OI</div>
           </div>
           <div style="padding:10px;background:#e8394a05;border:1px solid #e8394a22;border-radius:3px">
             <div style="color:#e8394a;font-weight:700;font-size:13px;margin-bottom:4px">PUTS</div>
             <div style="color:#f5c518;font-weight:700">${fmtM(STATE.totalPutPrem)}</div>
-            <div style="color:#4a5a7a;font-size:9.5px;margin-top:3px">${putOIT.toLocaleString()} OI</div>
+            <div style="color:#aacde0;font-size:9.5px;margin-top:3px">${putOIT.toLocaleString()} OI</div>
           </div>
         </div>
       </div>
       <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
-        <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:10px">◆ DATA INTEGRITY</div>
+        <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.12em;margin-bottom:10px">◆ DATA INTEGRITY</div>
         ${[["Stock Quote","Tradier Live",true],["Options Chain + Greeks","Tradier + ORATS",true],
            ["GEX Calculation","Computed from real data",true],["Open Interest","Tradier (EOD)",true],
            ["Dark Pool Levels","High-OI cluster proxy ⚠",false],["Sweep Detection","Unavailable (OPRA req)",false]]
           .map(d=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #0b1424;font-size:9.5px">
-            <span style="color:#5a7090">${d[0]}</span>
+            <span style="color:#bdd4e8">${d[0]}</span>
             <span style="color:${d[2]?'#00e5a0':'#f5c518'}">${d[2]?'✅':'⚠'} ${d[1]}</span>
           </div>`).join('')}
       </div>
@@ -738,19 +759,19 @@ function renderOverview() {
 function watchlistGrid() {
   const cards = WATCHLIST.map(t=>{
     const meta=TICKER_META[t], d=STATE.watchlistData[t];
-    const tc=meta?tierColor(meta.tier):"#5a7090";
+    const tc=meta?tierColor(meta.tier):"#bdd4e8";
     const isPos=d?d.chg>=0:true, isSel=t===STATE.selectedTicker;
     return `<div onclick="selectTicker('${t}')" style="padding:8px 10px;background:#0b1424;border-radius:3px;border-left:3px solid ${tc};cursor:${STATE.connected?'pointer':'default'}">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:12px;font-weight:700;color:${isSel?'#dde8f5':'#8899bb'}">${t}</span>
+        <span style="font-size:12px;font-weight:700;color:${isSel?'#dde8f5':'#aabbd8'}">${t}</span>
         ${d?`<span style="font-size:10px;color:${isPos?'#00e5a0':'#e8394a'}">${isPos?'▲':'▼'}${Math.abs(d.chg).toFixed(1)}%</span>`:''}
       </div>
       ${meta?`<div style="font-size:8.5px;color:${tc};font-weight:700;letter-spacing:0.06em;margin-top:2px">${meta.tier}</div>
-              <div style="font-size:8.5px;color:#3a5070;margin-top:1px">${meta.role}</div>`:''}
+              <div style="font-size:8.5px;color:#9ab8d0;margin-top:1px">${meta.role}</div>`:''}
     </div>`;
   }).join('');
   return `<div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
-    <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.14em;margin-bottom:10px">◆ WATCHLIST</div>
+    <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.14em;margin-bottom:10px">◆ WATCHLIST</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px">${cards}</div>
   </div>`;
 }
@@ -765,29 +786,29 @@ function renderGEXProfile() {
   const maxVal=visible.length?Math.max(...visible.map(s=>Math.max(s.callGEX,s.putGEX)),1):1;
   let chartHtml='';
   if(visible.length){
-    chartHtml=`<div style="display:flex;justify-content:flex-end;gap:14px;font-size:9px;margin-bottom:6px;color:#4a5a7a"><span style="color:#e8394a">■ Put GEX</span><span style="color:#00e5a0">■ Call GEX</span></div>`;
+    chartHtml=`<div style="display:flex;justify-content:flex-end;gap:14px;font-size:9px;margin-bottom:6px;color:#aacde0"><span style="color:#e8394a">■ Put GEX</span><span style="color:#00e5a0">■ Call GEX</span></div>`;
     visible.forEach(s=>{
       const atm=Math.abs(s.strike-spot)/spot<0.005;
       const cw=(s.callGEX/maxVal)*100, pw=(s.putGEX/maxVal)*100;
       chartHtml+=`<div style="display:grid;grid-template-columns:50px 1fr 8px 1fr 52px;align-items:center;gap:3px;margin-bottom:3px;background:${atm?'rgba(245,197,24,0.05)':'transparent'};border-left:${atm?'2px solid #f5c518':'2px solid transparent'};padding-left:2px">
-        <span style="font-size:9.5px;color:${atm?'#f5c518':'#4a5a7a'};text-align:right">${s.strike}</span>
+        <span style="font-size:9.5px;color:${atm?'#f5c518':'#aacde0'};text-align:right">${s.strike}</span>
         <div style="display:flex;justify-content:flex-end"><div style="width:${pw}%;height:10px;background:#e8394a88;border-radius:2px 0 0 2px;min-width:${pw>0?2:0}px"></div></div>
         <div style="width:1px;height:14px;background:#1c2535;margin:0 auto"></div>
         <div><div style="width:${cw}%;height:10px;background:#00e5a088;border-radius:0 2px 2px 0;min-width:${cw>0?2:0}px"></div></div>
         <span style="font-size:8.5px;color:${(s.callGEX-s.putGEX)>0?'#00e5a0':'#e8394a'}">${((s.callGEX-s.putGEX)/1e6).toFixed(0)}M</span>
       </div>`;
     });
-  } else { chartHtml=`<div style="color:#2a3a50;font-size:11px;padding:20px">${STATE.connected?(STATE.loading?"Loading...":"Select ticker."):"Connect token."}</div>`; }
+  } else { chartHtml=`<div style="color:#8db4d0;font-size:11px;padding:20px">${STATE.connected?(STATE.loading?"Loading...":"Select ticker."):"Connect token."}</div>`; }
   el.innerHTML=`<div style="display:grid;grid-template-columns:1fr 260px;gap:14px">
     <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:16px">
-      <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:8px;display:flex;justify-content:space-between">
+      <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.12em;margin-bottom:8px;display:flex;justify-content:space-between">
         <span>◆ GEX PROFILE — ${STATE.selectedTicker} ${STATE.selectedExp?'('+STATE.selectedExp+')':''}</span>
-        <span style="color:#1e3050">★ $${spot.toFixed(2)}</span>
+        <span style="color:#7a9fc0">★ $${spot.toFixed(2)}</span>
       </div>
       <div style="padding:6px 10px;background:#0b1424;border-radius:3px;margin-bottom:10px;display:flex;gap:20px;font-size:9.5px">
         <span>Net GEX: <span style="color:${gcol};font-weight:700">${fmtB(STATE.netGEX)}</span></span>
         <span>Posture: <span style="color:${gcol};font-weight:700">${posture}</span></span>
-        <span style="color:#2a3a50">±7% from spot</span>
+        <span style="color:#8db4d0">±7% from spot</span>
       </div>
       ${chartHtml}
     </div>
@@ -796,11 +817,11 @@ function renderGEXProfile() {
          {label:"CALL WALL",val:STATE.callWall?"$"+STATE.callWall.strike:"—",color:"#00e5a0",desc:"Ceiling/resistance"},
          {label:"PUT WALL",val:STATE.putWall?"$"+STATE.putWall.strike:"—",color:"#e8394a",desc:"Floor/support"}]
         .map(k=>`<div style="background:#080f1d;border:1px solid ${k.color}22;border-radius:5px;padding:14px">
-          <div style="font-size:9px;color:#2a3a50;letter-spacing:0.12em;margin-bottom:4px">${k.label}</div>
+          <div style="font-size:9px;color:#8db4d0;letter-spacing:0.12em;margin-bottom:4px">${k.label}</div>
           <div style="font-size:20px;font-weight:800;color:${k.color}">${k.val}</div>
-          <div style="font-size:9px;color:#4a5a7a;margin-top:4px">${k.desc}</div>
+          <div style="font-size:9px;color:#aacde0;margin-top:4px">${k.desc}</div>
         </div>`).join('')}
-      <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:12px;font-size:9.5px;color:#4a5a7a;line-height:1.7">
+      <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:12px;font-size:9.5px;color:#aacde0;line-height:1.7">
         <div style="color:#00e5a0;margin-bottom:4px;font-weight:700">POSITIVE GEX</div>Dealers buy dips, sell rips. Volatility dampened.
         <div style="color:#e8394a;margin:8px 0 4px;font-weight:700">NEGATIVE GEX</div>Dealers amplify moves. Trending conditions.
       </div>
@@ -818,21 +839,21 @@ function renderVolumeOI() {
     const pVOI=s.putOI>0?(s.putVol/s.putOI).toFixed(2):"—";
     const atm=spot&&Math.abs(s.strike-spot)/spot<0.005;
     const bias=s.callVol>s.putVol?"CALL":s.putVol>s.callVol?"PUT":"FLAT";
-    const bc=bias==="CALL"?"#00e5a0":bias==="PUT"?"#e8394a":"#2a3a50";
-    return `<div style="display:grid;grid-template-columns:60px 65px 65px 55px 65px 65px 55px 65px;gap:4px;padding:5px 10px;border-bottom:1px solid #0a1018;font-size:10.5px;background:${atm?'rgba(245,197,24,0.04)':'transparent'};border-left:${atm?'2px solid #f5c518':'2px solid transparent'}">
-      <span style="color:${atm?'#f5c518':'#5a7090'};font-weight:${atm?700:400}">${s.strike}</span>
-      <span style="color:#8899bb">${s.callVol.toLocaleString()}</span><span style="color:#4a5a7a">${s.callOI.toLocaleString()}</span>
-      <span style="color:${cVOI!=="—"&&parseFloat(cVOI)>1?'#f5c518':'#2a3a50'};font-weight:${cVOI!=="—"&&parseFloat(cVOI)>1?700:400}">${cVOI}</span>
-      <span style="color:#8899bb">${s.putVol.toLocaleString()}</span><span style="color:#4a5a7a">${s.putOI.toLocaleString()}</span>
-      <span style="color:${pVOI!=="—"&&parseFloat(pVOI)>1?'#f5c518':'#2a3a50'};font-weight:${pVOI!=="—"&&parseFloat(pVOI)>1?700:400}">${pVOI}</span>
+    const bc=bias==="CALL"?"#00e5a0":bias==="PUT"?"#e8394a":"#8db4d0";
+    return `<div style="display:grid;grid-template-columns:60px 65px 65px 55px 65px 65px 55px 65px;gap:4px;padding:5px 10px;border-bottom:1px solid #1a2a3a;font-size:10.5px;background:${atm?'rgba(245,197,24,0.04)':'transparent'};border-left:${atm?'2px solid #f5c518':'2px solid transparent'}">
+      <span style="color:${atm?'#f5c518':'#bdd4e8'};font-weight:${atm?700:400}">${s.strike}</span>
+      <span style="color:#aabbd8">${s.callVol.toLocaleString()}</span><span style="color:#aacde0">${s.callOI.toLocaleString()}</span>
+      <span style="color:${cVOI!=="—"&&parseFloat(cVOI)>1?'#f5c518':'#8db4d0'};font-weight:${cVOI!=="—"&&parseFloat(cVOI)>1?700:400}">${cVOI}</span>
+      <span style="color:#aabbd8">${s.putVol.toLocaleString()}</span><span style="color:#aacde0">${s.putOI.toLocaleString()}</span>
+      <span style="color:${pVOI!=="—"&&parseFloat(pVOI)>1?'#f5c518':'#8db4d0'};font-weight:${pVOI!=="—"&&parseFloat(pVOI)>1?700:400}">${pVOI}</span>
       <span style="color:${bc};font-weight:700;font-size:9.5px">${bias}</span>
     </div>`;
-  }).join(''):`<div style="padding:24px;color:#2a3a50;font-size:11px">Connect token to load data.</div>`;
+  }).join(''):`<div style="padding:24px;color:#8db4d0;font-size:11px">Connect token to load data.</div>`;
   el.innerHTML=`<div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px">
-    <div style="padding:10px 14px;border-bottom:1px solid #0f1c30;font-size:10px;color:#2a3a50;font-weight:700;letter-spacing:0.12em;display:flex;justify-content:space-between">
-      <span>◆ VOLUME / OI — ${STATE.selectedTicker}</span><span style="color:#1e3050">V/OI &gt;1.0 = new position</span>
+    <div style="padding:10px 14px;border-bottom:1px solid #0f1c30;font-size:10px;color:#8db4d0;font-weight:700;letter-spacing:0.12em;display:flex;justify-content:space-between">
+      <span>◆ VOLUME / OI — ${STATE.selectedTicker}</span><span style="color:#7a9fc0">V/OI &gt;1.0 = new position</span>
     </div>
-    <div style="display:grid;grid-template-columns:60px 65px 65px 55px 65px 65px 55px 65px;gap:4px;padding:5px 10px;font-size:8.5px;color:#1e3050;border-bottom:1px solid #0f1c30">
+    <div style="display:grid;grid-template-columns:60px 65px 65px 55px 65px 65px 55px 65px;gap:4px;padding:5px 10px;font-size:8.5px;color:#7a9fc0;border-bottom:1px solid #0f1c30">
       <span>STRIKE</span><span>C-VOL</span><span>C-OI</span><span>C-V/OI</span><span>P-VOL</span><span>P-OI</span><span>P-V/OI</span><span>BIAS</span>
     </div>${rowsHtml}</div>`;
 }
@@ -846,7 +867,7 @@ function renderKeyLevels() {
     const c=l.sentiment==="support"?"#00e5a0":"#e8394a";
     return `<div style="display:grid;grid-template-columns:70px 80px 90px 70px 90px;gap:4px;padding:5px 10px;border-bottom:1px solid #0f1724;font-size:10.5px">
       <span style="color:#f5c518;font-weight:700">$${l.price}</span>
-      <span style="color:#8899bb">${(l.totalOI/1000).toFixed(0)}K OI</span>
+      <span style="color:#aabbd8">${(l.totalOI/1000).toFixed(0)}K OI</span>
       <span style="color:#f5c518">$${(l.totalPrem/1000000).toFixed(2)}M</span>
       <span style="color:${c}">${dist>0?'▲':'▼'}${Math.abs(dist).toFixed(2)}%</span>
       <span style="color:${c};font-weight:700;font-size:9.5px">${l.sentiment.toUpperCase()} · ${l.note}</span>
@@ -854,22 +875,22 @@ function renderKeyLevels() {
   }).join('');
   el.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
     <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px">
-      <div style="padding:10px 14px;border-bottom:1px solid #0f1c30;font-size:10px;color:#2a3a50;font-weight:700;letter-spacing:0.12em">◆ HIGH-OI LEVELS (Dark Pool Proxy)</div>
-      <div style="display:grid;grid-template-columns:70px 80px 90px 70px 90px;gap:4px;padding:5px 10px;font-size:8.5px;color:#1e3050;border-bottom:1px solid #0a1018">
+      <div style="padding:10px 14px;border-bottom:1px solid #0f1c30;font-size:10px;color:#8db4d0;font-weight:700;letter-spacing:0.12em">◆ HIGH-OI LEVELS (Dark Pool Proxy)</div>
+      <div style="display:grid;grid-template-columns:70px 80px 90px 70px 90px;gap:4px;padding:5px 10px;font-size:8.5px;color:#7a9fc0;border-bottom:1px solid #1a2a3a">
         <span>STRIKE</span><span>TOTAL OI</span><span>PREMIUM</span><span>DIST</span><span>ROLE</span>
       </div>
-      ${dpRows||`<div style="padding:20px;color:#2a3a50;font-size:11px">Connect token.</div>`}
-      <div style="padding:6px 12px;font-size:8.5px;color:#1e3050;border-top:1px solid #0a1018">⚠ Estimated from high-OI clusters.</div>
+      ${dpRows||`<div style="padding:20px;color:#8db4d0;font-size:11px">Connect token.</div>`}
+      <div style="padding:6px 12px;font-size:8.5px;color:#7a9fc0;border-top:1px solid #1a2a3a">⚠ Estimated from high-OI clusters.</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;padding:14px">
-        <div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin-bottom:10px">◆ GEX KEY LEVELS</div>
+        <div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.12em;margin-bottom:10px">◆ GEX KEY LEVELS</div>
         ${[{label:"Gamma Flip",val:STATE.gammaFlip?"$"+STATE.gammaFlip:"N/A",color:"#f5c518",desc:"Net GEX zero-crossing"},
            {label:"Call Wall",val:STATE.callWall?"$"+STATE.callWall.strike:"N/A",color:"#00e5a0",desc:"Resistance ceiling"},
            {label:"Put Wall",val:STATE.putWall?"$"+STATE.putWall.strike:"N/A",color:"#e8394a",desc:"Support floor"},
            {label:"Spot Price",val:spot?"$"+spot.toFixed(2):"—",color:"#f5c518",desc:"Live last trade"}]
           .map(k=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;margin-bottom:4px;background:#0b1424;border-radius:3px;border-left:3px solid ${k.color}">
-            <div><div style="font-size:9px;color:#2a3a50;letter-spacing:0.1em">${k.label}</div><div style="font-size:9px;color:#4a5a7a;margin-top:1px">${k.desc}</div></div>
+            <div><div style="font-size:9px;color:#8db4d0;letter-spacing:0.1em">${k.label}</div><div style="font-size:9px;color:#aacde0;margin-top:1px">${k.desc}</div></div>
             <div style="font-size:16px;font-weight:800;color:${k.color}">${k.val}</div>
           </div>`).join('')}
       </div>
@@ -897,7 +918,7 @@ function renderSignals() {
     const c3col = sig.cond3 ? "#00e5a0" : "#e8394a";
 
     // Strategy recommendation
-    let strat = "", stratCol = "#5a7090";
+    let strat = "", stratCol = "#bdd4e8";
     if (isFired) {
       strat = sig.putStrike ?
         `Sell ${sig.ticker} put @ $${sig.putStrike} · below put wall · positive GEX support` :
@@ -911,16 +932,16 @@ function renderSignals() {
       <div class="signal-summary" onclick="toggleSignal('${id}')">
         ${isFired ? `<div class="bluebar-icon"><svg width="14" height="14" viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10" rx="1" fill="none" stroke="white" stroke-width="1.5"/><rect x="5" y="5" width="4" height="4" fill="white"/></svg></div>`
           : `<div style="width:28px;height:28px;border-radius:3px;background:#0f1c30;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <div style="width:10px;height:10px;border-radius:50%;background:${sig.strength>=40?'#f5c518':'#1e3050'}"></div></div>`}
+              <div style="width:10px;height:10px;border-radius:50%;background:${sig.strength>=40?'#f5c518':'#7a9fc0'}"></div></div>`}
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="font-size:15px;font-weight:800;color:#dde8f5">${sig.ticker}</span>
-            <span style="font-size:9px;font-weight:700;color:${isFired?'#38bdf8':'#2a3a50'};background:${isFired?'#38bdf811':'#0b1424'};padding:2px 7px;border-radius:10px;border:1px solid ${isFired?'#38bdf833':'#1e3050'}">
+            <span style="font-size:9px;font-weight:700;color:${isFired?'#38bdf8':'#8db4d0'};background:${isFired?'#38bdf811':'#0b1424'};padding:2px 7px;border-radius:10px;border:1px solid ${isFired?'#38bdf833':'#7a9fc0'}">
               ${isFired?'🔵 BLUE BAR ACTIVE':sig.strength>=40?'⚡ BUILDING':'◯ INACTIVE'}</span>
             <span style="font-size:11px;color:${chgCol}">${sig.chg>=0?'▲':'▼'}${Math.abs(sig.chg).toFixed(2)}%</span>
-            <span style="font-size:11px;color:#5a7090">$${sig.spot.toFixed(2)}</span>
+            <span style="font-size:11px;color:#bdd4e8">$${sig.spot.toFixed(2)}</span>
           </div>
-          <div style="font-size:9.5px;color:#4a5a7a;margin-top:3px">
+          <div style="font-size:9.5px;color:#aacde0;margin-top:3px">
             ${isFired?`<span style="color:#38bdf8">Institutions quietly positioning — pressure loading before move</span>`
               :`Strength: ${sig.strength}/100 · C V/OI: ${sig.cVOI} · C/P: ${sig.cpRatio}x`}
           </div>
@@ -928,60 +949,60 @@ function renderSignals() {
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
           <div style="text-align:right">
             <div style="font-size:18px;font-weight:800;color:${scCol}">${sc}</div>
-            <div style="font-size:8px;color:#2a3a50">PRESSURE</div>
+            <div style="font-size:8px;color:#8db4d0">PRESSURE</div>
           </div>
-          <span id="arr-${id}" style="color:#2a3a50;font-size:10px">${expanded?'▲':'▼'}</span>
+          <span id="arr-${id}" style="color:#8db4d0;font-size:10px">${expanded?'▲':'▼'}</span>
         </div>
       </div>
       <div id="sd-${id}" class="signal-detail ${expanded?'open':''}">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
           <div style="padding:8px;background:${sig.cond1?'#00e5a008':'#0b1424'};border:1px solid ${c1col}33;border-radius:3px">
-            <div style="font-size:8.5px;color:#2a3a50;margin-bottom:3px">CONDITION 1</div>
+            <div style="font-size:8.5px;color:#8db4d0;margin-bottom:3px">CONDITION 1</div>
             <div style="font-size:10px;font-weight:700;color:${c1col}">${sig.cond1?'✓ CALL FLOW SPIKE':'✗ CALL FLOW WEAK'}</div>
-            <div style="font-size:9px;color:#4a5a7a;margin-top:2px">Call V/OI: ${sig.cVOI} ${sig.cond1?'(>1.5 ✓)':'(need >1.5)'}</div>
+            <div style="font-size:9px;color:#aacde0;margin-top:2px">Call V/OI: ${sig.cVOI} ${sig.cond1?'(>1.5 ✓)':'(need >1.5)'}</div>
           </div>
           <div style="padding:8px;background:${sig.cond2?'#00e5a008':'#0b1424'};border:1px solid ${c2col}33;border-radius:3px">
-            <div style="font-size:8.5px;color:#2a3a50;margin-bottom:3px">CONDITION 2</div>
+            <div style="font-size:8.5px;color:#8db4d0;margin-bottom:3px">CONDITION 2</div>
             <div style="font-size:10px;font-weight:700;color:${c2col}">${sig.cond2?'✓ PRICE FLAT':'✗ PRICE MOVING'}</div>
-            <div style="font-size:9px;color:#4a5a7a;margin-top:2px">Change: ${sig.chg>=0?'+':''}${sig.chg.toFixed(2)}% ${sig.cond2?'(≤0.8% ✓)':'(need ≤0.8%)'}</div>
+            <div style="font-size:9px;color:#aacde0;margin-top:2px">Change: ${sig.chg>=0?'+':''}${sig.chg.toFixed(2)}% ${sig.cond2?'(≤0.8% ✓)':'(need ≤0.8%)'}</div>
           </div>
           <div style="padding:8px;background:${sig.cond3?'#00e5a008':'#0b1424'};border:1px solid ${c3col}33;border-radius:3px">
-            <div style="font-size:8.5px;color:#2a3a50;margin-bottom:3px">CONDITION 3</div>
+            <div style="font-size:8.5px;color:#8db4d0;margin-bottom:3px">CONDITION 3</div>
             <div style="font-size:10px;font-weight:700;color:${c3col}">${sig.cond3?'✓ GEX POSITIVE':'✗ GEX/FLIP MISS'}</div>
-            <div style="font-size:9px;color:#4a5a7a;margin-top:2px">GEX: ${fmtB(sig.netGEX)} · Flip: $${sig.gammaFlip||'—'}</div>
+            <div style="font-size:9px;color:#aacde0;margin-top:2px">GEX: ${fmtB(sig.netGEX)} · Flip: $${sig.gammaFlip||'—'}</div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-          <div style="background:#0b1424;border-radius:3px;padding:10px">
-            <div style="font-size:9px;color:#2a3a50;margin-bottom:6px;font-weight:700">KEY LEVELS</div>
+          <div style="background:#0d1e32;border-radius:3px;padding:10px">
+            <div style="font-size:9px;color:#8db4d0;margin-bottom:6px;font-weight:700">KEY LEVELS</div>
             ${[["Gamma Flip","$"+(sig.gammaFlip||"—"),"#f5c518"],["Call Wall",sig.target?"$"+sig.target:"—","#00e5a0"],["Put Wall / Support",sig.support?"$"+sig.support:"—","#e8394a"],["Hot Strike",sig.hotStrike?"$"+sig.hotStrike+" (V/OI "+sig.hotVOI+")":"—","#38bdf8"]]
-              .map(k=>`<div style="display:flex;justify-content:space-between;font-size:9.5px;padding:3px 0;border-bottom:1px solid #0a1018">
-                <span style="color:#4a5a7a">${k[0]}</span><span style="color:${k[2]};font-weight:700">${k[1]}</span>
+              .map(k=>`<div style="display:flex;justify-content:space-between;font-size:9.5px;padding:3px 0;border-bottom:1px solid #1a2a3a">
+                <span style="color:#aacde0">${k[0]}</span><span style="color:${k[2]};font-weight:700">${k[1]}</span>
               </div>`).join('')}
           </div>
-          <div style="background:#0b1424;border-radius:3px;padding:10px">
-            <div style="font-size:9px;color:#2a3a50;margin-bottom:6px;font-weight:700">PREMIUM FLOW</div>
-            ${[["Call Premium",fmtM(sig.callPrem),"#00e5a0"],["Put Premium",fmtM(sig.putPrem),"#e8394a"],["C/P Ratio",sig.cpRatio+"x",sig.cpRatio>=1?"#00e5a0":"#e8394a"],["Put V/OI",sig.pVOI,"#8899bb"]]
-              .map(k=>`<div style="display:flex;justify-content:space-between;font-size:9.5px;padding:3px 0;border-bottom:1px solid #0a1018">
-                <span style="color:#4a5a7a">${k[0]}</span><span style="color:${k[2]};font-weight:700">${k[1]}</span>
+          <div style="background:#0d1e32;border-radius:3px;padding:10px">
+            <div style="font-size:9px;color:#8db4d0;margin-bottom:6px;font-weight:700">PREMIUM FLOW</div>
+            ${[["Call Premium",fmtM(sig.callPrem),"#00e5a0"],["Put Premium",fmtM(sig.putPrem),"#e8394a"],["C/P Ratio",sig.cpRatio+"x",sig.cpRatio>=1?"#00e5a0":"#e8394a"],["Put V/OI",sig.pVOI,"#aabbd8"]]
+              .map(k=>`<div style="display:flex;justify-content:space-between;font-size:9.5px;padding:3px 0;border-bottom:1px solid #1a2a3a">
+                <span style="color:#aacde0">${k[0]}</span><span style="color:${k[2]};font-weight:700">${k[1]}</span>
               </div>`).join('')}
           </div>
         </div>
         ${isFired?`<div style="background:#38bdf808;border:1px solid #38bdf833;border-radius:4px;padding:12px">
           <div style="font-size:9.5px;font-weight:700;color:#38bdf8;margin-bottom:6px">🔵 TRADE IDEA — ${sig.ticker}</div>
           <div style="font-size:10px;color:#dde8f5;margin-bottom:4px;font-weight:700">DIRECTION: BULLISH</div>
-          <div style="font-size:9.5px;color:#8899bb;line-height:1.7;margin-bottom:8px">
+          <div style="font-size:9.5px;color:#aabbd8;line-height:1.7;margin-bottom:8px">
             Institutional call flow loading while price is flat — classic pressure-before-move signature.<br>
             Positive GEX above gamma flip means dealers will stabilize any dip.<br>
             ${sig.putStrike?`<span style="color:#00e5a0">Sell put at $${sig.putStrike} — below put wall, GEX support underneath.</span>`:''}
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:9.5px">
-            <div style="background:#0b1424;padding:8px;border-radius:3px"><div style="color:#2a3a50;margin-bottom:2px">ENTRY ZONE</div><div style="color:#f5c518;font-weight:700">Near $${sig.spot.toFixed(2)}</div><div style="color:#4a5a7a;font-size:8.5px">Current price</div></div>
-            <div style="background:#0b1424;padding:8px;border-radius:3px"><div style="color:#2a3a50;margin-bottom:2px">TARGET</div><div style="color:#00e5a0;font-weight:700">${sig.target?"$"+sig.target:"Call Wall"}</div><div style="color:#4a5a7a;font-size:8.5px">Call wall resistance</div></div>
-            <div style="background:#0b1424;padding:8px;border-radius:3px"><div style="color:#2a3a50;margin-bottom:2px">INVALIDATION</div><div style="color:#e8394a;font-weight:700">${sig.gammaFlip?"Below $"+sig.gammaFlip:"Below gamma flip"}</div><div style="color:#4a5a7a;font-size:8.5px">GEX regime flips</div></div>
+            <div style="background:#0b1424;padding:8px;border-radius:3px"><div style="color:#8db4d0;margin-bottom:2px">ENTRY ZONE</div><div style="color:#f5c518;font-weight:700">Near $${sig.spot.toFixed(2)}</div><div style="color:#aacde0;font-size:8.5px">Current price</div></div>
+            <div style="background:#0b1424;padding:8px;border-radius:3px"><div style="color:#8db4d0;margin-bottom:2px">TARGET</div><div style="color:#00e5a0;font-weight:700">${sig.target?"$"+sig.target:"Call Wall"}</div><div style="color:#aacde0;font-size:8.5px">Call wall resistance</div></div>
+            <div style="background:#0b1424;padding:8px;border-radius:3px"><div style="color:#8db4d0;margin-bottom:2px">INVALIDATION</div><div style="color:#e8394a;font-weight:700">${sig.gammaFlip?"Below $"+sig.gammaFlip:"Below gamma flip"}</div><div style="color:#aacde0;font-size:8.5px">GEX regime flips</div></div>
           </div>
         </div>`
-        :`<div style="background:#0b1424;border-radius:4px;padding:10px;font-size:9.5px;color:#4a5a7a">
+        :`<div style="background:#0b1424;border-radius:4px;padding:10px;font-size:9.5px;color:#aacde0">
           ${sig.strength>=40?`Signal building — ${[!sig.cond1?"waiting for call V/OI >1.5":"✓ call flow confirmed",!sig.cond2?"price needs to settle flat":"✓ price flat",!sig.cond3?"need positive GEX + above gamma flip":"✓ GEX regime positive"].filter(s=>!s.startsWith("✓")).join(", ")}.`
           :"All three conditions unmet — no signal. Monitor for changes."}
         </div>`}
@@ -992,7 +1013,7 @@ function renderSignals() {
   let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div>
       <div style="font-size:14px;font-weight:800;color:#dde8f5;letter-spacing:0.1em">🔵 BLUE BAR SIGNAL SCANNER</div>
-      <div style="font-size:9.5px;color:#4a5a7a;margin-top:3px">Fires when: Call V/OI >1.5 + Price flat (≤0.8% chg) + Positive GEX above gamma flip — all three simultaneously</div>
+      <div style="font-size:9.5px;color:#aacde0;margin-top:3px">Fires when: Call V/OI >1.5 + Price flat (≤0.8% chg) + Positive GEX above gamma flip — all three simultaneously</div>
     </div>
     <button id="signals-scan-btn" class="scan-btn" onclick="runSignalsScan()" ${!STATE.connected?'disabled':''}>
       ${STATE.signals.length?'↺ RESCAN ALL':'▶ RUN SCAN'}
@@ -1000,9 +1021,9 @@ function renderSignals() {
   </div>`;
 
   if (!STATE.connected) {
-    html += `<div style="padding:30px;text-align:center;color:#2a3a50;font-size:11px">Connect your Tradier token to run the Blue Bar scanner.</div>`;
+    html += `<div style="padding:30px;text-align:center;color:#8db4d0;font-size:11px">Connect your Tradier token to run the Blue Bar scanner.</div>`;
   } else if (!STATE.signals.length) {
-    html += `<div style="padding:30px;text-align:center;color:#2a3a50;font-size:11px">Click RUN SCAN to scan your watchlist for Blue Bar signals.</div>`;
+    html += `<div style="padding:30px;text-align:center;color:#8db4d0;font-size:11px">Click RUN SCAN to scan your watchlist for Blue Bar signals.</div>`;
   } else {
     if (fired.length) {
       html += `<div style="font-size:10px;font-weight:700;color:#38bdf8;letter-spacing:0.12em;margin-bottom:8px;padding:6px 10px;background:#38bdf808;border:1px solid #38bdf822;border-radius:3px">🔵 ACTIVE SIGNALS — ${fired.length} ticker${fired.length>1?'s':''} with full Blue Bar confirmation</div>`;
@@ -1013,13 +1034,13 @@ function renderSignals() {
       building.forEach((s,i) => { html += cardHtml(s, 'b'+i); });
     }
     if (inactive.length) {
-      html += `<div style="font-size:10px;font-weight:700;color:#2a3a50;letter-spacing:0.12em;margin:12px 0 8px">◯ INACTIVE (${inactive.length})</div>`;
+      html += `<div style="font-size:10px;font-weight:700;color:#8db4d0;letter-spacing:0.12em;margin:12px 0 8px">◯ INACTIVE (${inactive.length})</div>`;
       html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px">`;
       inactive.forEach(s => {
         const scCol = scoreColor(s.pressureScore||50);
         html += `<div style="background:#080f1d;border:1px solid #0f1c30;border-radius:4px;padding:10px;display:flex;justify-content:space-between;align-items:center">
-          <div><span style="font-size:13px;font-weight:700;color:#4a5a7a">${s.ticker}</span>
-          <div style="font-size:8.5px;color:#1e3050;margin-top:2px">Strength ${s.strength}/100</div></div>
+          <div><span style="font-size:13px;font-weight:700;color:#aacde0">${s.ticker}</span>
+          <div style="font-size:8.5px;color:#7a9fc0;margin-top:2px">Strength ${s.strength}/100</div></div>
           <span style="font-size:14px;font-weight:700;color:${scCol}">${s.pressureScore||50}</span>
         </div>`;
       });
@@ -1037,7 +1058,7 @@ function renderScout() {
   let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div>
       <div style="font-size:14px;font-weight:800;color:#dde8f5;letter-spacing:0.1em">🔍 WATCHLIST SCOUT</div>
-      <div style="font-size:9.5px;color:#4a5a7a;margin-top:3px">Scores 30 tickers across: Liquidity · GEX Structure · Premium Quality · Flow Activity</div>
+      <div style="font-size:9.5px;color:#aacde0;margin-top:3px">Scores 30 tickers across: Liquidity · GEX Structure · Premium Quality · Flow Activity</div>
     </div>
     <button class="scan-btn" onclick="runScout()" ${!STATE.connected||STATE.scoutLoading?'disabled':''}>
       ${STATE.scoutLoading?'SCANNING...':STATE.scoutResults.length?'↺ RESCAN':'▶ RUN SCOUT'}
@@ -1045,11 +1066,11 @@ function renderScout() {
   </div>`;
 
   if (!STATE.connected) {
-    html += `<div style="padding:30px;text-align:center;color:#2a3a50;font-size:11px">Connect your Tradier token to run the Watchlist Scout.</div>`;
+    html += `<div style="padding:30px;text-align:center;color:#8db4d0;font-size:11px">Connect your Tradier token to run the Watchlist Scout.</div>`;
   } else if (STATE.scoutLoading && !top.length) {
     html += `<div style="padding:30px;text-align:center;color:#38bdf8;font-size:11px">Scanning tickers... this takes about 60 seconds.</div>`;
   } else if (!top.length) {
-    html += `<div style="padding:30px;text-align:center;color:#2a3a50;font-size:11px">Click RUN SCOUT to analyze 30 tickers and find the best opportunities right now.</div>`;
+    html += `<div style="padding:30px;text-align:center;color:#8db4d0;font-size:11px">Click RUN SCOUT to analyze 30 tickers and find the best opportunities right now.</div>`;
   } else {
     // Summary row
     const addRec = top.filter(t=>t.strategy==="SELL PUTS"||t.strategy==="COVERED CALLS").slice(0,5);
@@ -1065,9 +1086,9 @@ function renderScout() {
               <span style="font-size:14px;font-weight:800;color:#dde8f5">${t.ticker}</span>${bbTag}
             </div>
             <div style="font-size:9px;color:${t.stratColor};font-weight:700;margin-top:2px">${t.strategy}</div>
-            ${t.putWall?`<div style="font-size:8.5px;color:#4a5a7a">Put wall $${t.putWall}</div>`:''}
+            ${t.putWall?`<div style="font-size:8.5px;color:#aacde0">Put wall $${t.putWall}</div>`:''}
           </div>
-          <div style="font-size:20px;font-weight:800;color:${t.score>=70?'#00e5a0':t.score>=55?'#f5c518':'#5a7090'}">${t.score}</div>
+          <div style="font-size:20px;font-weight:800;color:${t.score>=70?'#00e5a0':t.score>=55?'#f5c518':'#bdd4e8'}">${t.score}</div>
         </div>`;
       });
       html += `</div></div>`;
@@ -1075,12 +1096,12 @@ function renderScout() {
 
     // Full table
     html += `<div style="background:#080f1d;border:1px solid #0f1c30;border-radius:5px;overflow:hidden">
-      <div style="display:grid;grid-template-columns:60px 50px 60px 55px 55px 55px 55px 80px 1fr;gap:4px;padding:7px 12px;font-size:8.5px;color:#1e3050;border-bottom:1px solid #0f1c30;font-weight:700">
-        <span>TICKER</span><span>SCORE</span><span>STRATEGY</span><span>LIQUID</span><span>GEX</span><span>PREM</span><span>FLOW</span><span>PRESSURE</span><span>NOTES</span>
+      <div style="display:grid;grid-template-columns:60px 50px 55px 60px 55px 55px 55px 55px 80px 1fr;gap:4px;padding:7px 12px;font-size:8.5px;color:#7a9fc0;border-bottom:1px solid #0f1c30;font-weight:700">
+        <span>TICKER</span><span>SCORE</span><span>PRICE</span><span>STRATEGY</span><span>LIQUID</span><span>GEX</span><span>PREM</span><span>FLOW</span><span>PRESSURE</span><span>NOTES</span>
       </div>`;
 
     top.forEach((t, i) => {
-      const scCol = t.score>=70?"#00e5a0":t.score>=55?"#f5c518":"#5a7090";
+      const scCol = t.score>=70?"#00e5a0":t.score>=55?"#f5c518":"#bdd4e8";
       const psCol = scoreColor(t.ps);
       const chgCol = t.chg>=0?"#00e5a0":"#e8394a";
       const inWatchlist = WATCHLIST.includes(t.ticker);
@@ -1091,23 +1112,25 @@ function renderScout() {
       if (t.callWall) notes.push("Call wall $"+t.callWall);
       if (t.putWall) notes.push("Put wall $"+t.putWall);
 
-      html += `<div style="display:grid;grid-template-columns:60px 50px 60px 55px 55px 55px 55px 80px 1fr;gap:4px;padding:6px 12px;border-bottom:1px solid #0a1018;font-size:10px;background:${i%2===0?'#07101e':'#080f1d'};${inWatchlist?'border-left:2px solid #38bdf855':''}" title="${t.ticker}">
+      const tierColor2 = t.priceTier==="MICRO"?"#e8394a":t.priceTier==="LOW"?"#a78bfa":t.priceTier==="MID"?"#bdd4e8":"#38bdf8";
+      html += `<div style="display:grid;grid-template-columns:60px 50px 55px 60px 55px 55px 55px 55px 80px 1fr;gap:4px;padding:6px 12px;border-bottom:1px solid #1a2a3a;font-size:10px;background:${i%2===0?'#07101e':'#080f1d'};${inWatchlist?'border-left:2px solid #38bdf855':''}" title="${t.ticker}">
         <div>
-          <span style="font-size:12px;font-weight:700;color:${inWatchlist?'#38bdf8':'#8899bb'}">${t.ticker}</span>
+          <span style="font-size:12px;font-weight:700;color:${inWatchlist?'#38bdf8':'#aabbd8'}">${t.ticker}</span>
           ${bbBadge?`<span style="font-size:9px"> ${bbBadge}</span>`:''}
-          ${inWatchlist?'<div style="font-size:7.5px;color:#38bdf855">★ ON LIST</div>':''}
+          ${inWatchlist?'<div style="font-size:7.5px;color:#38bdf8aa">★ ON LIST</div>':''}
         </div>
         <span style="font-size:15px;font-weight:800;color:${scCol}">${t.score}</span>
+        <div><span style="font-size:10px;font-weight:700;color:#f5c518">$${t.spot.toFixed(0)}</span><div style="font-size:7.5px;color:${tierColor2}">${t.priceTier}</div></div>
         <span style="font-size:9px;font-weight:700;color:${t.stratColor}">${t.strategy}</span>
-        <span style="color:#5a7090">${t.liqScore}/25</span>
+        <span style="color:#bdd4e8">${t.liqScore}/25</span>
         <span style="color:${t.gexScore>=15?'#00e5a0':t.gexScore>=10?'#f5c518':'#e8394a'}">${t.gexScore}/25</span>
-        <span style="color:#5a7090">${t.premScore}/25</span>
-        <span style="color:${t.flowScore>=15?'#00e5a0':t.flowScore>=10?'#f5c518':'#5a7090'}">${t.flowScore}/25</span>
+        <span style="color:#bdd4e8">${t.premScore}/25</span>
+        <span style="color:${t.flowScore>=15?'#00e5a0':t.flowScore>=10?'#f5c518':'#bdd4e8'}">${t.flowScore}/25</span>
         <div>
           <span style="font-size:11px;font-weight:700;color:${psCol}">${t.ps}</span>
           <span style="font-size:9px;color:${chgCol}"> ${t.chg>=0?'+':''}${t.chg.toFixed(1)}%</span>
         </div>
-        <span style="font-size:8.5px;color:#4a5a7a">${notes.slice(0,2).join(' · ')}</span>
+        <span style="font-size:8.5px;color:#aacde0">${notes.slice(0,2).join(' · ')}</span>
       </div>`;
     });
 
@@ -1115,7 +1138,7 @@ function renderScout() {
       html += `<div style="padding:10px 12px;font-size:9.5px;color:#38bdf8;border-top:1px solid #0f1c30">Scanning more tickers...</div>`;
     }
     html += `</div>
-    <div style="font-size:8.5px;color:#1e3050;margin-top:8px">★ = currently on your watchlist · 🔵 = Blue Bar signal active · Score out of 100</div>`;
+    <div style="font-size:8.5px;color:#7a9fc0;margin-top:8px">★ = currently on your watchlist · 🔵 = Blue Bar signal active · Score out of 100</div>`;
   }
   el.innerHTML = html;
 }
@@ -1126,7 +1149,7 @@ function renderSetupGuide() {
   const blocks = [
     {title:"STEP 1 — Create Tradier Account",color:"#38bdf8",content:"1. Go to brokerage.tradier.com/signup\n2. Fill out registration (~5 min)\n3. Select Individual + Cash account\n4. Verify your email\n5. Fund with any amount (keeps API alive)\n\nBank transfer takes 2-3 business days.\nNo trading required — just keep it funded."},
     {title:"STEP 2 — Get Your API Token",color:"#f5c518",content:"1. Log into Tradier\n2. Click your name (top right)\n3. Click Settings → API Access\n4. Click Generate Token\n5. Select PRODUCTION (not Sandbox!)\n\nPaste it in the CONNECT box above.\nTreat it like a password."},
-    {title:"STEP 3 — Blue Bar Signal Logic",color:"#38bdf8",content:"Three conditions must ALL fire:\n\n1. Call V/OI > 1.5\n   → New institutional call positions opening\n\n2. Price change ≤ 0.8%\n   → Pressure loading before price moves\n\n3. Positive GEX + above gamma flip\n   → Stable regime, dealers support dips\n\nAll three = Blue Bar confirmed."},
+    {title:"STEP 3 — Blue Bar Signal Logic",color:"#38bdf8",content:"Three conditions must ALL fire:\n\n1. Call V/OI > 1.5\n   → New institutional call positions opening\n\n2. Price change ≤ 1.5%\n   → Not extended, pressure loading quietly\n\n3. Positive GEX\n   → Dealers stabilizing, dips get bought\n   (Above gamma flip = bonus signal strength)\n\nAll three = Blue Bar confirmed."},
     {title:"STEP 4 — Scout Scoring",color:"#a78bfa",content:"Four factors scored 0-25 each:\n\nLiquidity (25)  — Total OI > 10K\nGEX Structure (25) — Positive + above flip\nPremium Quality (25) — C/P ratio + volume\nFlow Activity (25) — Call V/OI + pressure\n\nScore ≥ 70 = SELL PUTS recommended\nScore 60-69 = COVERED CALLS\nScore 50-59 = MONITOR\nScore < 50 = OBSERVE"},
     {title:"STEP 5 — What's Real vs Estimated",color:"#00e5a0",content:"✅ Real data:\n  Stock quotes, options chain\n  Greeks (via ORATS/Tradier)\n  Open interest + daily volume\n  GEX, gamma flip, call/put walls\n  Blue Bar signal computation\n\n⚠ Estimated/proxy:\n  Dark pool levels (high-OI proxy)\n  Sweep detection (needs OPRA ~$200/mo)"},
     {title:"READING THE SIGNALS",color:"#f5c518",content:"SCORE 65+ = Bullish institutional bias\n→ Calls dominate, positive GEX\n\nSCORE 42-64 = Neutral / coiling\n→ Breakout pending — wait\n\nSCORE < 42 = Bearish bias\n→ Avoid new put positions\n\nGAMMA FLIP = Most critical level\n→ Above: dealers stabilize\n→ Below: dealers amplify\n\n⚠ EDUCATIONAL ONLY — NOT FINANCIAL ADVICE"},
@@ -1134,7 +1157,7 @@ function renderSetupGuide() {
   el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
     ${blocks.map(b=>`<div style="background:#0b1120;border:1px solid ${b.color}22;border-radius:6px;padding:14px">
       <div style="font-size:10.5px;font-weight:800;color:${b.color};margin-bottom:8px;letter-spacing:0.1em">${b.title}</div>
-      <div style="font-size:10px;color:#5a7090;white-space:pre-line;line-height:1.75">${b.content}</div>
+      <div style="font-size:10px;color:#bdd4e8;white-space:pre-line;line-height:1.75">${b.content}</div>
     </div>`).join('')}
   </div>`;
 }
@@ -1161,7 +1184,7 @@ async function init() {
       // Saved token failed — clear it and show panel
       localStorage.removeItem('shadowtape_token');
       document.getElementById('conn-status').textContent = 'NOT CONNECTED';
-      document.getElementById('conn-status').style.color = '#1e3050';
+      document.getElementById('conn-status').style.color = '#7a9fc0';
       setStatus("⚠ Saved token expired — paste your token again.", "#f5c518");
     }
   }
