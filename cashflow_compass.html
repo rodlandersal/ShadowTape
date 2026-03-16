@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CashFlow Compass</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #212121;
+    --surface3: #2a2a2a;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0f0f0;
+    --text2: #999;
+    --text3: #666;
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.12);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.12);
+    --blue: #3b82f6;
+    --blue-dim: rgba(59,130,246,0.12);
+    --red: #ef4444;
+    --teal: #14b8a6;
+    --accent: #22c55e;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
+  
+  /* Layout */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+  .main { flex: 1; overflow-y: auto; }
+  
+  /* Sidebar */
+  .logo { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
+  .logo-name { font-size: 16px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+  .logo-tag { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .logo-accent { color: var(--accent); }
+  .nav { padding: 10px 8px; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--radius-sm); cursor: pointer; color: var(--text2); font-size: 13px; transition: all 0.15s; margin-bottom: 2px; }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--green-dim); color: var(--green); font-weight: 500; }
+  .nav-icon { width: 16px; text-align: center; font-size: 14px; }
+  .nav-section { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 10px 6px; }
+  .ai-badge { background: linear-gradient(135deg, #22c55e, #14b8a6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 10px; font-weight: 700; margin-left: auto; }
+  
+  /* Content area */
+  .page { display: none; padding: 28px 32px; }
+  .page.active { display: block; }
+  .page-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .page-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+  
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .card-sm { background: var(--surface2); border-radius: var(--radius-sm); padding: 14px; }
+  .section-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
+  
+  /* Metric cards */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .metric-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric-value { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .metric.green { border-color: rgba(34,197,94,0.25); }
+  .metric.green .metric-value { color: var(--green); }
+  
+  /* Grid */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  
+  /* Tables */
+  .table-wrap { overflow-x: auto; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+  .data-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); cursor: pointer; }
+  
+  /* Pills */
+  .pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .pill-green { background: var(--green-dim); color: var(--green); }
+  .pill-amber { background: var(--amber-dim); color: var(--amber); }
+  .pill-blue { background: var(--blue-dim); color: var(--blue); }
+  .pill-red { background: rgba(239,68,68,0.12); color: var(--red); }
+  .pill-teal { background: rgba(20,184,166,0.12); color: var(--teal); }
+  
+  /* Sliders */
+  .slider-row { margin-bottom: 16px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+  .slider-val { font-weight: 600; color: var(--text); }
+  input[type=range] { width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: var(--surface3); outline: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--green); cursor: pointer; }
+  
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .btn:hover { background: var(--surface3); border-color: var(--border2); }
+  .btn-primary { background: var(--green); border-color: var(--green); color: #000; font-weight: 600; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  
+  /* Progress bars */
+  .progress-track { background: var(--surface3); border-radius: 2px; height: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  
+  /* AI Chat */
+  .ai-panel { display: flex; flex-direction: column; height: calc(100vh - 56px); }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .chat-input-area { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+  .chat-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text); font-size: 13px; resize: none; outline: none; font-family: inherit; }
+  .chat-input:focus { border-color: var(--border2); }
+  .msg { display: flex; gap: 10px; }
+  .msg-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+  .msg-u .msg-avatar { background: var(--blue-dim); color: var(--blue); }
+  .msg-a .msg-avatar { background: var(--green-dim); color: var(--green); }
+  .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; max-width: 680px; font-size: 13px; line-height: 1.65; }
+  .msg-u .msg-bubble { background: var(--blue-dim); border-color: rgba(59,130,246,0.2); }
+  .msg-a .msg-bubble { }
+  .msg-bubble strong { color: var(--text); font-weight: 600; }
+  .msg-bubble ul { padding-left: 16px; margin: 8px 0; }
+  .msg-bubble li { margin-bottom: 4px; color: var(--text2); }
+  .typing-dots span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin: 0 2px; animation: dot-bounce 1.2s infinite; }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot-bounce { 0%,80%,100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.1); opacity: 1; } }
+  .quick-prompts { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 12px; }
+  .quick-btn { font-size: 12px; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .quick-btn:hover { border-color: var(--green); color: var(--green); }
+  
+  /* Alloc input */
+  .alloc-input { width: 58px; background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; color: var(--text); font-size: 12px; text-align: right; }
+  
+  /* Detail panel */
+  .detail-panel { position: fixed; right: 0; top: 0; bottom: 0; width: 380px; background: var(--surface); border-left: 1px solid var(--border); padding: 24px; z-index: 100; overflow-y: auto; transform: translateX(100%); transition: transform 0.25s ease; }
+  .detail-panel.open { transform: translateX(0); }
+  .detail-close { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); border: none; color: var(--text2); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+  
+  /* Chart canvas placeholder */
+  .chart-area { position: relative; height: 220px; margin-top: 16px; }
+  
+  /* Alloc bar */
+  .alloc-bar { margin-bottom: 14px; }
+  .alloc-bar-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+  
+  /* Select / filter */
+  select { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; color: var(--text); font-size: 12px; outline: none; cursor: pointer; }
+  select:focus { border-color: var(--border2); }
+  
+  /* Starter plan */
+  .starter-step { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .starter-num { width: 24px; height: 24px; border-radius: 50%; background: var(--green-dim); color: var(--green); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  
+  /* Disclaimer */
+  .disclaimer { font-size: 11px; color: var(--text3); line-height: 1.6; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 28px; }
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-name">CashFlow <span class="logo-accent">Compass</span></div>
+    <div class="logo-tag">Retirement Income Planner</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Planning</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">⊞</span> Dashboard</div>
+    <div class="nav-item" onclick="showPage('investments',this)"><span class="nav-icon">◈</span> Investments</div>
+    <div class="nav-item" onclick="showPage('projector',this)"><span class="nav-icon">◉</span> Projector</div>
+    <div class="nav-item" onclick="showPage('portfolio',this)"><span class="nav-icon">⊟</span> My Portfolio</div>
+    <div class="nav-section">AI Advisor</div>
+    <div class="nav-item" onclick="showPage('ai',this)"><span class="nav-icon">✦</span> Ask Compass <span class="ai-badge">AI</span></div>
+  </nav>
+  <div style="padding: 12px 16px; border-top: 1px solid var(--border);">
+    <div style="font-size: 11px; color: var(--text3); line-height: 1.5;">Data: Feb 2026<br>Yields verified via market sources</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page active">
+  <div class="page-title">Retirement Cash Flow Dashboard</div>
+  <div class="page-sub">Target: $15,000/month — tracking your path to financial independence</div>
+
+  <div class="metrics">
+    <div class="metric green">
+      <div class="metric-label">Monthly Target</div>
+      <div class="metric-value">$15,000</div>
+      <div class="metric-sub">cash flow goal</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Capital Needed (5yr)</div>
+      <div class="metric-value">$1.5–2M</div>
+      <div class="metric-sub">at 9–12% blended yield</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Capital Needed (10yr)</div>
+      <div class="metric-value">$750K–1.2M</div>
+      <div class="metric-sub">with reinvestment compounding</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Minimum to Begin</div>
+      <div class="metric-value">$500</div>
+      <div class="metric-sub">any of the 15 picks</div>
+    </div>
+  </div>
+
+  <div class="grid3" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="section-label">Phase 1 — Accumulate (Yr 1–2)</div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.7;">Reinvest all distributions. Enable DRIP on JEPI, JEPQ, SCHD. Build Dividend King positions in MO, KO, PEP as compounding bedrock. Target $50K–$150K total.</div>
+    </div>
+    <div class="card">
+      <div class="section-label">Phase 2 — Scale (Yr 2–4)</div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.7;">Diversify into REITs, BDCs, O (monthly). Add monthly contributions. Layer in Dividend Kings for long-term dividend growth. Target $300K–$800K.</div>
+    </div>
+    <div class="card">
+      <div class="section-label">Phase 3 — Draw (Yr 5–10)</div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.7;">Shift to income mode. Stop reinvesting. 9–12% blended yield generates $15K/month at $1.5M–2M deployed. Dividend Kings provide inflation protection.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="section-label">Model Allocation — Research Basis</div>
+    <div style="font-size:12px; color:var(--text3); margin-bottom:16px;">Two-layer strategy: High-yield income layer (ETFs, REITs, BDCs) + Dividend King growth layer</div>
+    <div id="alloc-bars-dash"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Why Dividend Kings Belong in This Portfolio</div>
+    <div class="grid2" style="margin-top:4px;">
+      <div>
+        <div style="font-size:13px; color:var(--text); font-weight:500; margin-bottom:6px;">The Case For Dividend Kings</div>
+        <div style="font-size:13px; color:var(--text2); line-height:1.7;">Your spreadsheet contains 57 stocks with <strong>50–71 consecutive years</strong> of dividend increases. While yields are lower (2–6%), they provide something high-yield ETFs can't: guaranteed dividend growth that beats inflation over time. KO, PEP, ADP, and PEP hold "A" risk scores and have raised dividends through every recession since the 1970s.</div>
+      </div>
+      <div>
+        <div style="font-size:13px; color:var(--text); font-weight:500; margin-bottom:6px;">How They Complement the Portfolio</div>
+        <div style="font-size:13px; color:var(--text2); line-height:1.7;">At $15K/month in year 5, inflation erodes purchasing power fast. A 10% allocation to Dividend Kings (PEP, ADP, KO, O) with 5–9% annual dividend growth creates a natural inflation hedge. In 10 years, a $5K/month Dividend King stream could grow to $8K/month — without adding capital. <strong>This is what makes the plan durable.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INVESTMENTS -->
+<div id="page-investments" class="page">
+  <div class="page-title">Investment Universe</div>
+  <div class="page-sub">15 verified cash flow investments + 4 Dividend King picks from your spreadsheet — click any row for details</div>
+
+  <div style="display:flex; gap:10px; margin-bottom:16px; align-items:center;">
+    <select id="filter-risk" onchange="renderInvestments()">
+      <option value="all">All risk levels</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="Medium-High">Medium-High</option>
+    </select>
+    <select id="filter-type" onchange="renderInvestments()">
+      <option value="all">All types</option>
+      <option value="Covered Call ETF">Covered Call ETF</option>
+      <option value="Dividend ETF">Dividend ETF</option>
+      <option value="REIT ETF">REIT ETF</option>
+      <option value="Bond ETF">Bond ETF</option>
+      <option value="BDC">BDC</option>
+      <option value="Dividend King">Dividend King</option>
+    </select>
+    <select id="filter-layer" onchange="renderInvestments()">
+      <option value="all">All layers</option>
+      <option value="Income">Income layer</option>
+      <option value="Growth">Growth layer (Kings)</option>
+    </select>
+    <div style="margin-left:auto; font-size:12px; color:var(--text3);" id="inv-count"></div>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Yield</th>
+            <th>Risk</th>
+            <th>Pays</th>
+            <th>Layer</th>
+            <th>Div Growth</th>
+            <th>Yrs of Growth</th>
+          </tr>
+        </thead>
+        <tbody id="invest-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTOR -->
+<div id="page-projector" class="page">
+  <div class="page-title">Cash Flow Projector</div>
+  <div class="page-sub">Model your path to $15,000/month — adjust capital, contributions, and yield</div>
+
+  <div class="grid2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="section-label">Inputs</div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Starting Capital</span><span class="slider-val" id="v-capital">$10,000</span></div>
+        <input type="range" min="500" max="500000" step="500" value="10000" id="s-capital" oninput="updateProjector()">
+      </div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Monthly Contribution</span><span class="slider-val" id="v-contrib">$500</span></div>
+        <input type="range" min="0" max="5000" step="50" value="500" id="s-contrib" oninput="updateProjector()">
+      </div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Blended Annual Yield</span><span class="slider-val" id="v-yield">9.0%</span></div>
+        <input type="range" min="3" max="14" step="0.25" value="9" id="s-yield" oninput="updateProjector()">
+      </div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Reinvestment Rate</span><span class="slider-val" id="v-reinvest">100%</span></div>
+        <input type="range" min="0" max="100" step="5" value="100" id="s-reinvest" oninput="updateProjector()">
+      </div>
+    </div>
+    <div>
+      <div class="metrics" style="grid-template-columns:1fr 1fr; margin-bottom:12px;">
+        <div class="metric green">
+          <div class="metric-label">5-Yr Portfolio</div>
+          <div class="metric-value" id="p5-val" style="font-size:18px;">—</div>
+        </div>
+        <div class="metric green">
+          <div class="metric-label">5-Yr Monthly CF</div>
+          <div class="metric-value" id="p5-cf" style="font-size:18px;">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">10-Yr Portfolio</div>
+          <div class="metric-value" id="p10-val" style="font-size:18px;">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">10-Yr Monthly CF</div>
+          <div class="metric-value" id="p10-cf" style="font-size:18px;">—</div>
+        </div>
+      </div>
+      <div class="card-sm" style="margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text3); margin-bottom:6px;"><span>5-yr progress to $15K/mo</span><span id="pct5-label">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="prog5" style="width:0%; background:var(--amber);"></div></div>
+      </div>
+      <div class="card-sm">
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text3); margin-bottom:6px;"><span>10-yr progress to $15K/mo</span><span id="pct10-label">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="prog10" style="width:0%; background:var(--green);"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="section-label">Portfolio Growth</div>
+    <div class="chart-area"><canvas id="proj-chart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Year-by-Year Forecast</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Year</th><th>Portfolio Value</th><th>Annual Income</th><th>Monthly CF</th><th>% of $15K Goal</th><th>Status</th></tr></thead>
+        <tbody id="yr-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div id="page-portfolio" class="page">
+  <div class="page-title">My Portfolio Builder</div>
+  <div class="page-sub">Assign allocation percentages. Total must equal 100%.</div>
+
+  <div class="metrics" style="margin-bottom:20px;">
+    <div class="metric green">
+      <div class="metric-label">Blended Yield</div>
+      <div class="metric-value" id="port-yield">0.0%</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Income / $100K</div>
+      <div class="metric-value" id="port-income">$0/mo</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Capital for $15K/mo</div>
+      <div class="metric-value" id="port-needed">—</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Total Allocated</div>
+      <div class="metric-value" id="port-total">0%</div>
+      <div class="metric-sub" id="port-status"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Ticker</th><th>Type</th><th>Yield</th><th>Risk</th><th>Layer</th><th>% Allocation</th></tr></thead>
+        <tbody id="port-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">$500 Starter Action Plan</div>
+    <div id="starter-plan"></div>
+  </div>
+</div>
+
+<!-- AI ADVISOR -->
+<div id="page-ai" class="page" style="padding:0;">
+  <div class="ai-panel">
+    <div style="padding:20px 20px 12px; border-bottom:1px solid var(--border);">
+      <div class="page-title" style="margin-bottom:2px;">Ask Compass <span style="font-size:14px; color:var(--green);">✦ AI</span></div>
+      <div style="font-size:12px; color:var(--text3);">Powered by Claude · Knows your investments, yields, and goals</div>
+    </div>
+    <div class="quick-prompts">
+      <button class="quick-btn" onclick="sendQuick('What are the safest high-yield investments in the list?')">Safest high-yield picks</button>
+      <button class="quick-btn" onclick="sendQuick('How do I build a $15K/month portfolio starting with $500?')">$500 starter plan</button>
+      <button class="quick-btn" onclick="sendQuick('Compare JEPI vs JEPQ for a retirement income portfolio')">JEPI vs JEPQ</button>
+      <button class="quick-btn" onclick="sendQuick('What Dividend Kings are best for inflation protection?')">Dividend Kings for inflation</button>
+      <button class="quick-btn" onclick="sendQuick('What is the tax efficiency of covered call ETFs like JEPI and SPYI?')">Tax efficiency</button>
+      <button class="quick-btn" onclick="sendQuick('Should I use a Roth IRA or taxable account for these investments?')">Roth vs taxable</button>
+      <button class="quick-btn" onclick="sendQuick('What is DRIP and how does it accelerate compounding?')">How DRIP works</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chat-input" rows="2" placeholder="Ask about any investment, strategy, or goal..." onkeydown="handleKey(event)"></textarea>
+      <button class="btn btn-primary" onclick="sendMessage()">Send ↗</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <button class="detail-close" onclick="closeDetail()">×</button>
+  <div id="detail-content"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const investments = [
+  // HIGH-YIELD INCOME LAYER
+  { ticker:'JEPI', name:'JPMorgan Equity Premium Income ETF', type:'Covered Call ETF', layer:'Income', yield:7.5, risk:'Low', freq:'Monthly', min:500, er:0.35, yrsGrowth:null, divGrowth:null,
+    desc:'S&P 500 covered calls + low-vol large caps. $41B+ AUM. The gold standard for stable monthly income with NAV preservation. Industry benchmark for conservative income investors.',
+    start:'Buy 8–10 shares (~$500). Enable DRIP immediately. Core position — hold through volatility, premiums spike when markets get choppy.' },
+  { ticker:'JEPQ', name:'JPMorgan Nasdaq Eq Premium Income ETF', type:'Covered Call ETF', layer:'Income', yield:10.7, risk:'Medium', freq:'Monthly', min:500, er:0.35, yrsGrowth:null, divGrowth:null,
+    desc:'Nasdaq-100 covered call ETF. $32B+ AUM. 5-star Morningstar. Higher yield than JEPI due to tech volatility. Monthly distributions ranged $0.44–$0.62 in 2025. Best paired with JEPI.',
+    start:'Buy 8–9 shares (~$500). Pair with JEPI for balance. Reinvest all dividends for the first 2 years to accelerate compounding.' },
+  { ticker:'SCHD', name:'Schwab U.S. Dividend Equity ETF', type:'Dividend ETF', layer:'Income', yield:3.8, risk:'Low', freq:'Quarterly', min:500, er:0.06, yrsGrowth:14, divGrowth:0.10,
+    desc:'Best-in-class dividend growth ETF. 3.74% yield + ~10% annual dividend growth rate. 199% total return over 10 years. Lowest expense ratio (0.06%) in class. Long-term compounder.',
+    start:'Buy 6–7 shares (~$500). Enable DRIP. This is your compounding foundation — reinvest every quarter for 5+ years.' },
+  { ticker:'DIVO', name:'Amplify CWP Enhanced Dividend Income ETF', type:'Covered Call ETF', layer:'Income', yield:4.8, risk:'Low', freq:'Monthly', min:500, er:0.55, yrsGrowth:null, divGrowth:null,
+    desc:'5-star Morningstar. Writes selective covered calls on individual holdings. Remarkably tight monthly distribution range ($0.344–$0.363 in 2025). Best risk-adjusted return in peer group.',
+    start:'Buy ~10 shares (~$500). Very consistent monthly payer — great for budgeting income. Use alongside JEPI as the stability core.' },
+  { ticker:'SPYI', name:'NEOS S&P 500 High Income ETF', type:'Covered Call ETF', layer:'Income', yield:12.0, risk:'Medium', freq:'Monthly', min:500, er:0.68, yrsGrowth:null, divGrowth:null,
+    desc:'Tax-efficient S&P 500 covered call ETF using put spreads. Downside protection built in. Return-of-capital treatment reduces annual tax drag. Best-in-class for taxable accounts.',
+    start:'$500 starting position. Prioritize inside a taxable brokerage account for ROC tax efficiency. Excellent complement to JEPI.' },
+  { ticker:'BIZD', name:'VanEck BDC Income ETF', type:'BDC', layer:'Income', yield:9.25, risk:'Medium', freq:'Monthly', min:500, er:0.41, yrsGrowth:null, divGrowth:null,
+    desc:'BDC basket ETF — Business Development Companies lend to mid-market companies and must distribute 90%+ of taxable income. Floating rate benefit when rates stay elevated.',
+    start:'$500 starting position. Floating rate loans benefit in rate-stable environment. Monitor quarterly for NAV drift.' },
+  { ticker:'VNQ', name:'Vanguard Real Estate ETF', type:'REIT ETF', layer:'Income', yield:4.2, risk:'Medium', freq:'Quarterly', min:500, er:0.12, yrsGrowth:null, divGrowth:null,
+    desc:'Largest REIT ETF. Broad real estate exposure across commercial, industrial, residential. Lowest cost in category (0.12%). Inflation hedge with dividend growth.',
+    start:'Buy 5–6 shares (~$500). REITs are rate-sensitive — great long-term hold as rates normalize. Add to position quarterly.' },
+  { ticker:'O', name:'Realty Income Corp', type:'REIT ETF', layer:'Income', yield:5.8, risk:'Low', freq:'Monthly', min:500, er:0, yrsGrowth:30, divGrowth:0.04,
+    desc:'The "Monthly Dividend Company." 30+ years of consecutive monthly dividends. Dividend Aristocrat. Net lease with 15,500+ properties. One of the most reliable income stocks ever.',
+    start:'Buy 8 shares (~$500). Set DRIP. Add shares anytime you have extra cash. This is the anchor of any income portfolio — never sell.' },
+  { ticker:'MAIN', name:'Main Street Capital', type:'BDC', layer:'Income', yield:7.2, risk:'Medium', freq:'Monthly', min:500, er:0, yrsGrowth:null, divGrowth:null,
+    desc:'Premier BDC with monthly base dividends + special dividends. Internally managed (lower costs, better alignment). Invests in lower middle-market companies.',
+    start:'Buy 8–9 shares (~$500). Monthly payer. Internally managed BDC — better long-term alignment than externally managed peers.' },
+  { ticker:'HYBB', name:'iShares BB Rated Corporate Bond ETF', type:'Bond ETF', layer:'Income', yield:6.09, risk:'Medium', freq:'Monthly', min:500, er:0.25, yrsGrowth:null, divGrowth:null,
+    desc:'BB-rated corporate bonds (below investment grade but near it). 1,000+ holdings. Most bonds mature within 1–5 years. 9.78% annualized 3-year return. Monthly income, manageable duration.',
+    start:'$500 allocation. Good bond diversifier. Short-term maturities reduce interest rate risk significantly versus longer bond funds.' },
+  { ticker:'MORT', name:'VanEck Mortgage REIT Income ETF', type:'REIT ETF', layer:'Income', yield:12.6, risk:'Medium-High', freq:'Monthly', min:500, er:0.41, yrsGrowth:null, divGrowth:null,
+    desc:'Mortgage REIT basket ETF. 12.6% yield from interest rate spread income. Top holdings NLY and AGNC. Volatile but high income. Best in falling or stable rate environment.',
+    start:'Limit to 5–8% of portfolio. High yield but rate sensitive. Best inside a Roth IRA. Use as an income booster, not a core position.' },
+  { ticker:'GPIQ', name:'Goldman Sachs Nasdaq Eq Premium Income ETF', type:'Covered Call ETF', layer:'Income', yield:8.5, risk:'Medium', freq:'Monthly', min:500, er:0.29, yrsGrowth:null, divGrowth:null,
+    desc:'Goldman Sachs covered call ETF on Nasdaq-100. Lowest expense ratio (0.29%) in Nasdaq covered call peer group. Flexible OTM approach preserves more upside than at-the-money peers.',
+    start:'$500 minimum. Structural alternative to JEPQ at lower cost. Growing track record — watch 2026 for performance confirmation.' },
+  { ticker:'KNG', name:'FT Cboe Vest S&P 500 Dividend Aristocrats', type:'Covered Call ETF', layer:'Income', yield:5.5, risk:'Low', freq:'Monthly', min:500, er:0.74, yrsGrowth:null, divGrowth:null,
+    desc:'Dividend Aristocrats (25+ yrs div growth) with covered call overlay. Very stable monthly distributions — tighter range than JEPI. Quality companies with proven payout records.',
+    start:'Buy 10–11 shares (~$500). Consistent monthly payer. Higher ER (0.74%) is the tradeoff for stability. Long-term hold.' },
+  { ticker:'SDIV', name:'Global X SuperDividend ETF', type:'Dividend ETF', layer:'Income', yield:7.26, risk:'Medium-High', freq:'Monthly', min:500, er:0.58, yrsGrowth:null, divGrowth:null,
+    desc:'Global high-dividend stocks. Monthly distributions. International diversification. Note: history of occasional distribution cuts — verify sustainability quarterly.',
+    start:'Limit to 5% max. Monthly income useful but international/currency risk adds complexity. Verify distributions are stable before adding.' },
+  { ticker:'QYLD', name:'Global X Nasdaq 100 Covered Call ETF', type:'Covered Call ETF', layer:'Income', yield:11.5, risk:'Medium-High', freq:'Monthly', min:500, er:0.60, yrsGrowth:null, divGrowth:null,
+    desc:'At-the-money Nasdaq-100 covered calls. 11–13% yield. No upside participation. Significant NAV erosion in bull markets. Use only as income extractor in sideways/volatile markets.',
+    start:'$500 position only. Do not overweight. Best inside a Roth IRA. Only hold if you believe markets will be flat-to-volatile in your horizon.' },
+
+  // DIVIDEND KING GROWTH LAYER (from spreadsheet)
+  { ticker:'PEP', name:'PepsiCo Inc', type:'Dividend King', layer:'Growth', yield:3.6, risk:'Low', freq:'Quarterly', min:500, er:0, yrsGrowth:54, divGrowth:0.06,
+    desc:'Buy-rated Dividend King. 54 consecutive years of dividend increases. 13.3% expected total return (5yr). A-rated dividend safety. Consumer Staples — recession-proof cash flows. ADP expected to grow dividend ~6%/yr.',
+    start:'Buy 3 shares (~$500). Enable DRIP. Think long-term — this is your inflation hedge. Dividend of 3.6% today becomes 6%+ on your cost basis in 10 years at 6% growth.' },
+  { ticker:'ADP', name:'Automatic Data Processing Inc', type:'Dividend King', layer:'Growth', yield:3.2, risk:'Low', freq:'Quarterly', min:500, er:0, yrsGrowth:51, divGrowth:0.09,
+    desc:'Buy-rated Dividend King. 19.3% expected total return (5yr) — highest in the spreadsheet. 51 consecutive years of increases. A-rated safety. Payroll/HR SaaS business with recurring revenues. 9% dividend growth rate projected.',
+    start:'Buy 2–3 shares (~$500). ADP is the highest expected return Buy-rated stock in the King list. DRIP and forget for 10 years.' },
+  { ticker:'KO', name:'Coca-Cola Co', type:'Dividend King', layer:'Growth', yield:2.6, risk:'Low', freq:'Quarterly', min:500, er:0, yrsGrowth:63, divGrowth:0.05,
+    desc:'63 consecutive years of dividend increases. A-rated safety. $338B market cap — one of the most durable businesses on earth. Lower yield but bulletproof income stream. Held by Berkshire Hathaway.',
+    start:'Buy 6–7 shares (~$500). KO is a generational hold. Lower yield today, but 63 years of raises means your yield on cost will compound dramatically.' },
+  { ticker:'MO', name:'Altria Group Inc', type:'Dividend King', layer:'Growth', yield:6.3, risk:'Low', freq:'Quarterly', min:500, er:0, yrsGrowth:55, divGrowth:0.038,
+    desc:'55 years of dividend increases. 6.3% yield — highest in the Dividend Kings list. B-rated dividend safety (higher than others). Consumer Staples. Controversial but deeply consistent income payer. Held by income investors for decades.',
+    start:'Buy 7–8 shares (~$500). Highest-yielding Dividend King in the list. B-rating (vs A for most) means slightly higher risk — keep position moderate.' }
+];
+
+const modelAlloc = [
+  {ticker:'JEPI', pct:20}, {ticker:'JEPQ', pct:18}, {ticker:'SCHD', pct:12},
+  {ticker:'O', pct:10}, {ticker:'DIVO', pct:8}, {ticker:'BIZD', pct:7},
+  {ticker:'VNQ', pct:5}, {ticker:'HYBB', pct:5}, {ticker:'PEP', pct:5},
+  {ticker:'ADP', pct:5}, {ticker:'KO', pct:3}, {ticker:'MO', pct:2}
+];
+
+const allocColors = ['#22c55e','#3b82f6','#f59e0b','#14b8a6','#a78bfa','#f97316','#06b6d4','#84cc16','#ec4899','#8b5cf6','#10b981','#f43f5e'];
+
+let userAlloc = {};
+investments.forEach(i => userAlloc[i.ticker] = 0);
+
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'projector') setTimeout(updateProjector, 100);
+  if (id === 'portfolio') renderPortfolio();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function fmtK(n) {
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+  if (n >= 1e3) return '$' + Math.round(n/1e3) + 'K';
+  return fmt(n);
+}
+function riskPill(r) {
+  if (r==='Low') return 'pill-green';
+  if (r==='Medium') return 'pill-amber';
+  return 'pill-red';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderAllocBars() {
+  const el = document.getElementById('alloc-bars-dash');
+  let html = '';
+  modelAlloc.forEach((a, i) => {
+    const inv = investments.find(x => x.ticker === a.ticker);
+    const col = allocColors[i] || '#666';
+    html += `<div class="alloc-bar">
+      <div class="alloc-bar-header">
+        <span style="color:var(--text); font-size:13px;">${a.ticker} <span style="color:var(--text3); font-size:12px;">${inv ? '— '+inv.type : ''}</span></span>
+        <span style="color:var(--text2); font-size:12px;">${a.pct}% &nbsp;·&nbsp; ${inv ? inv.yield.toFixed(1)+'% yield' : ''}</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${a.pct}%; background:${col};"></div></div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+// ── INVESTMENTS ───────────────────────────────────────────────────────────────
+function renderInvestments() {
+  const rF = document.getElementById('filter-risk').value;
+  const tF = document.getElementById('filter-type').value;
+  const lF = document.getElementById('filter-layer').value;
+  const list = investments.filter(i => {
+    if (rF !== 'all' && i.risk !== rF) return false;
+    if (tF !== 'all' && i.type !== tF) return false;
+    if (lF !== 'all' && i.layer !== lF) return false;
+    return true;
+  });
+  document.getElementById('inv-count').textContent = list.length + ' investments';
+  let html = '';
+  list.forEach(inv => {
+    const dg = inv.divGrowth ? (inv.divGrowth*100).toFixed(0)+'%/yr' : '—';
+    const yg = inv.yrsGrowth ? inv.yrsGrowth+' yrs' : '—';
+    html += `<tr onclick="showDetail('${inv.ticker}')">
+      <td><strong style="color:var(--text);">${inv.ticker}</strong></td>
+      <td style="color:var(--text2); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${inv.name}</td>
+      <td><span class="pill ${inv.layer==='Growth' ? 'pill-teal' : 'pill-blue'}">${inv.type}</span></td>
+      <td style="color:${inv.yield>=7 ? 'var(--green)' : inv.yield>=4 ? 'var(--amber)' : 'var(--text)'}; font-weight:500;">${inv.yield.toFixed(1)}%</td>
+      <td><span class="pill ${riskPill(inv.risk)}">${inv.risk}</span></td>
+      <td style="color:var(--text2);">${inv.freq}</td>
+      <td><span class="pill ${inv.layer==='Growth' ? 'pill-teal' : 'pill-blue'}">${inv.layer}</span></td>
+      <td style="color:var(--text2);">${dg}</td>
+      <td style="color:var(--text2);">${yg}</td>
+    </tr>`;
+  });
+  document.getElementById('invest-tbody').innerHTML = html;
+}
+
+function showDetail(ticker) {
+  const inv = investments.find(i => i.ticker === ticker);
+  if (!inv) return;
+  const panel = document.getElementById('detail-panel');
+  const inc10k = Math.round(10000 * inv.yield/100/12);
+  document.getElementById('detail-content').innerHTML = `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:22px; font-weight:600; letter-spacing:-0.5px; color:var(--text);">${inv.ticker}</div>
+      <div style="font-size:13px; color:var(--text2); margin-top:4px;">${inv.name}</div>
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <span class="pill ${riskPill(inv.risk)}">${inv.risk} risk</span>
+        <span class="pill ${inv.layer==='Growth' ? 'pill-teal' : 'pill-blue'}">${inv.type}</span>
+        <span class="pill pill-green">${inv.freq}</span>
+      </div>
+    </div>
+    <div class="metrics" style="grid-template-columns:1fr 1fr; margin-bottom:16px;">
+      <div class="metric green"><div class="metric-label">Annual Yield</div><div class="metric-value" style="font-size:20px;">${inv.yield.toFixed(1)}%</div></div>
+      <div class="metric"><div class="metric-label">Income / $10K</div><div class="metric-value" style="font-size:20px;">${fmt(inc10k)}/mo</div></div>
+      ${inv.yrsGrowth ? `<div class="metric"><div class="metric-label">Yrs of Growth</div><div class="metric-value" style="font-size:20px;">${inv.yrsGrowth}</div></div>` : ''}
+      ${inv.divGrowth ? `<div class="metric"><div class="metric-label">Div Growth Rate</div><div class="metric-value" style="font-size:20px;">${(inv.divGrowth*100).toFixed(0)}%/yr</div></div>` : ''}
+    </div>
+    <div style="font-size:13px; color:var(--text2); line-height:1.7; margin-bottom:16px;">${inv.desc}</div>
+    <div style="background:var(--green-dim); border:1px solid rgba(34,197,94,0.2); border-radius:var(--radius-sm); padding:14px;">
+      <div style="font-size:11px; font-weight:600; color:var(--green); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">$500 Starter Action</div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.65;">${inv.start}</div>
+    </div>`;
+  panel.classList.add('open');
+}
+
+function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
+
+// ── PROJECTOR ─────────────────────────────────────────────────────────────────
+let projChart = null;
+function updateProjector() {
+  const cap = parseFloat(document.getElementById('s-capital').value);
+  const contrib = parseFloat(document.getElementById('s-contrib').value);
+  const yld = parseFloat(document.getElementById('s-yield').value) / 100;
+  const reinv = parseFloat(document.getElementById('s-reinvest').value) / 100;
+
+  document.getElementById('v-capital').textContent = fmtK(cap);
+  document.getElementById('v-contrib').textContent = fmt(contrib);
+  document.getElementById('v-yield').textContent = parseFloat(document.getElementById('s-yield').value).toFixed(1) + '%';
+  document.getElementById('v-reinvest').textContent = Math.round(document.getElementById('s-reinvest').value) + '%';
+
+  let bal = cap;
+  const labels = [], vals = [];
+  for (let y = 1; y <= 10; y++) {
+    const inc = bal * yld;
+    bal = bal + (inc * reinv) + (contrib * 12);
+    labels.push('Yr ' + y);
+    vals.push(Math.round(bal));
+  }
+
+  const cf5 = vals[4] * yld / 12, cf10 = vals[9] * yld / 12;
+  document.getElementById('p5-val').textContent = fmtK(vals[4]);
+  document.getElementById('p5-cf').textContent = fmt(cf5) + '/mo';
+  document.getElementById('p10-val').textContent = fmtK(vals[9]);
+  document.getElementById('p10-cf').textContent = fmt(cf10) + '/mo';
+
+  const pct5 = Math.min(100, Math.round(cf5/15000*100));
+  const pct10 = Math.min(100, Math.round(cf10/15000*100));
+  document.getElementById('pct5-label').textContent = pct5 + '%';
+  document.getElementById('pct10-label').textContent = pct10 + '%';
+  document.getElementById('prog5').style.width = pct5 + '%';
+  document.getElementById('prog5').style.background = pct5>=100 ? 'var(--green)' : pct5>=50 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('prog10').style.width = pct10 + '%';
+  document.getElementById('prog10').style.background = pct10>=100 ? 'var(--green)' : 'var(--amber)';
+
+  // Chart
+  if (projChart) projChart.destroy();
+  const ctx = document.getElementById('proj-chart').getContext('2d');
+  projChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Portfolio', data: vals, backgroundColor: vals.map((v,i) => i<5 ? 'rgba(59,130,246,0.55)' : 'rgba(34,197,94,0.55)'), borderRadius: 4 }] },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales: { x:{ticks:{color:'#666', font:{size:11}}, grid:{display:false}}, y:{ticks:{color:'#666', font:{size:11}, callback: v => fmtK(v)}, grid:{color:'rgba(255,255,255,0.04)'}} } }
+  });
+
+  // Table
+  let tHtml = '';
+  vals.forEach((v,i) => {
+    const mInc = Math.round(v * yld / 12);
+    const pct = Math.min(100, Math.round(mInc/15000*100));
+    const col = pct>=100 ? 'var(--green)' : pct>=50 ? 'var(--amber)' : 'var(--text3)';
+    const status = pct>=100 ? '<span class="pill pill-green">Goal Reached ✓</span>' : pct>=50 ? '<span class="pill pill-amber">On Track</span>' : '<span class="pill" style="background:var(--surface3); color:var(--text3);">Building</span>';
+    const bold = i===4||i===9 ? 'font-weight:600; color:var(--text);' : 'color:var(--text2);';
+    tHtml += `<tr>
+      <td style="${bold}">Year ${i+1}</td>
+      <td style="${bold}">${fmtK(v)}</td>
+      <td style="${bold}">${fmt(v*yld)}/yr</td>
+      <td style="font-weight:600; color:${col};">${fmt(mInc)}/mo</td>
+      <td style="color:${col};">${pct}%</td>
+      <td>${status}</td>
+    </tr>`;
+  });
+  document.getElementById('yr-tbody').innerHTML = tHtml;
+}
+
+// ── PORTFOLIO ─────────────────────────────────────────────────────────────────
+function renderPortfolio() {
+  let html = '';
+  investments.forEach(inv => {
+    html += `<tr>
+      <td><strong style="color:var(--text);">${inv.ticker}</strong></td>
+      <td style="color:var(--text3);">${inv.type}</td>
+      <td style="color:${inv.yield>=7?'var(--green)':inv.yield>=4?'var(--amber)':'var(--text)'}; font-weight:500;">${inv.yield.toFixed(1)}%</td>
+      <td><span class="pill ${riskPill(inv.risk)}">${inv.risk}</span></td>
+      <td><span class="pill ${inv.layer==='Growth'?'pill-teal':'pill-blue'}">${inv.layer}</span></td>
+      <td><input type="number" class="alloc-input" data-ticker="${inv.ticker}" min="0" max="100" step="1" value="${userAlloc[inv.ticker]}" oninput="updateAlloc(this)"></td>
+    </tr>`;
+  });
+  document.getElementById('port-tbody').innerHTML = html;
+  calcPortfolio();
+  renderStarterPlan();
+}
+
+function updateAlloc(el) {
+  userAlloc[el.dataset.ticker] = parseFloat(el.value) || 0;
+  calcPortfolio();
+}
+
+function calcPortfolio() {
+  const total = Object.values(userAlloc).reduce((a,b)=>a+b, 0);
+  document.getElementById('port-total').textContent = Math.round(total) + '%';
+  const diff = Math.round(100 - total);
+  document.getElementById('port-status').textContent = diff === 0 ? '✓ balanced' : diff > 0 ? diff + '% remaining' : Math.abs(diff) + '% over';
+  if (total === 0) { document.getElementById('port-yield').textContent = '0.0%'; document.getElementById('port-income').textContent = '$0/mo'; document.getElementById('port-needed').textContent = '—'; return; }
+  let blended = 0;
+  investments.forEach(inv => { blended += (userAlloc[inv.ticker] / total) * inv.yield; });
+  document.getElementById('port-yield').textContent = blended.toFixed(1) + '%';
+  document.getElementById('port-income').textContent = fmt(Math.round(100000 * blended/100 / 12)) + '/mo';
+  const needed = blended > 0 ? Math.round(15000 / (blended/100/12)) : 0;
+  document.getElementById('port-needed').textContent = needed > 0 ? fmtK(needed) : '—';
+}
+
+function renderStarterPlan() {
+  const top = [...investments].sort((a,b) => b.yield - a.yield).slice(0,5);
+  let html = '';
+  top.forEach((inv, i) => {
+    html += `<div class="starter-step">
+      <div class="starter-num">${i+1}</div>
+      <div>
+        <span style="font-weight:600; color:var(--text); font-size:13px;">${inv.ticker}</span>
+        <span class="pill pill-green" style="margin-left:6px;">${inv.yield.toFixed(1)}% yield</span>
+        <div style="font-size:12px; color:var(--text2); margin-top:5px; line-height:1.6;">${inv.start}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('starter-plan').innerHTML = html;
+}
+
+// ── AI CHAT ───────────────────────────────────────────────────────────────────
+const SYSTEM_PROMPT = `You are Compass, an expert retirement income planning AI built into the CashFlow Compass tool. You specialize in cash flow investing for retirement — helping individuals and couples build $15,000/month in passive income using a portfolio of high-yield ETFs, REITs, BDCs, covered call ETFs, and Dividend King stocks.
+
+INVESTMENT DATABASE (verified March 2026 yields):
+INCOME LAYER:
+- JEPI: 7.5% yield, Low risk, Monthly, Covered Call ETF (S&P 500), $41B+ AUM
+- JEPQ: 10.7% yield, Medium risk, Monthly, Covered Call ETF (Nasdaq-100), $32B+ AUM  
+- SCHD: 3.8% yield, Low risk, Quarterly, Dividend ETF, 10% div growth rate, 14 yrs growth
+- DIVO: 4.8% yield, Low risk, Monthly, Covered Call ETF, 5-star Morningstar
+- SPYI: 12.0% yield, Medium risk, Monthly, Tax-efficient covered call ETF (ROC treatment)
+- BIZD: 9.25% yield, Medium risk, Monthly, BDC ETF (floating rate benefit)
+- VNQ: 4.2% yield, Medium risk, Quarterly, Vanguard REIT ETF (largest, 0.12% ER)
+- O (Realty Income): 5.8% yield, Low risk, Monthly, 30+ yrs consecutive monthly dividends
+- MAIN (Main Street Capital): 7.2% yield, Medium risk, Monthly, internally managed BDC
+- HYBB: 6.09% yield, Medium risk, Monthly, BB-rated corporate bond ETF
+- MORT: 12.6% yield, Medium-High risk, Monthly, Mortgage REIT ETF
+- GPIQ: 8.5% yield, Medium risk, Monthly, Goldman Sachs Nasdaq covered call (0.29% ER)
+- KNG: 5.5% yield, Low risk, Monthly, Dividend Aristocrats + covered calls
+- SDIV: 7.26% yield, Medium-High risk, Monthly, Global X SuperDividend (monitor cuts)
+- QYLD: 11.5% yield, Medium-High risk, Monthly, at-the-money Nasdaq covered calls (NAV erodes)
+
+DIVIDEND KINGS LAYER (from user's research spreadsheet, Feb 2026):
+- PEP (PepsiCo): 3.6% yield, Low risk, 54 yrs growth, 6%/yr projected div growth, Buy-rated, 13.3% expected 5yr total return
+- ADP (Automatic Data Processing): 3.2% yield, Low risk, 51 yrs growth, 9%/yr div growth, Buy-rated, 19.3% expected 5yr total return (HIGHEST in spreadsheet)
+- KO (Coca-Cola): 2.6% yield, Low risk, 63 yrs growth, 5%/yr div growth, A safety rating
+- MO (Altria): 6.3% yield, Low risk (B safety rating), 55 yrs growth, 3.8%/yr div growth, highest yielding King
+
+MODEL ALLOCATION: JEPI 20%, JEPQ 18%, SCHD 12%, O 10%, DIVO 8%, BIZD 7%, VNQ 5%, HYBB 5%, PEP 5%, ADP 5%, KO 3%, MO 2%
+Blended yield: ~9.2%
+
+GOAL: $15,000/month cash flow
+- 5-year path: Requires $1.5–2M at 9–12% yield, OR heavy monthly contributions + reinvestment
+- 10-year path: Much more achievable — compounding does heavy lifting
+- Minimum start: $500
+
+KEY STRATEGY CONCEPTS:
+- DRIP (Dividend Reinvestment Plan): Auto-reinvest dividends to buy more shares — accelerates compounding
+- ROC (Return of Capital): SPYI distributions partly treated as ROC — delays tax, great for taxable accounts
+- Rate sensitivity: Mortgage REITs (MORT) and BDCs (BIZD, MAIN) are affected by interest rate environment
+- Covered call tradeoff: Caps upside in bull markets, but delivers consistent income regardless
+- Dividend King value: Lower yield today, but 50–70 yr track record of annual increases beats inflation over time
+
+Be conversational, specific, and practical. Reference the actual investments by ticker. Give concrete numbers. Keep responses focused and useful. Avoid generic disclaimers unless directly relevant. Use markdown formatting (bold, bullets) for clarity.`;
+
+let chatHistory = [];
+
+function appendMsg(role, content, isTyping = false) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg msg-' + (role === 'user' ? 'u' : 'a');
+  div.id = isTyping ? 'typing-indicator' : '';
+  div.innerHTML = `
+    <div class="msg-avatar">${role === 'user' ? 'U' : '✦'}</div>
+    <div class="msg-bubble">${isTyping ? '<div class="typing-dots"><span></span><span></span><span></span></div>' : formatMsg(content)}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+function formatMsg(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^### (.*?)$/gm, '<div style="font-size:14px; font-weight:600; color:var(--text); margin:10px 0 4px;">$1</div>')
+    .replace(/^## (.*?)$/gm, '<div style="font-size:15px; font-weight:600; color:var(--text); margin:12px 0 6px;">$1</div>')
+    .replace(/^- (.*?)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>(\n|$))+/gs, m => '<ul style="margin:6px 0;">' + m + '</ul>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  appendMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  appendMsg('assistant', '', true);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    document.getElementById('typing-indicator')?.remove();
+    const reply = data.content?.[0]?.text || 'Sorry, I had trouble responding. Please try again.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    appendMsg('assistant', reply);
+  } catch (e) {
+    document.getElementById('typing-indicator')?.remove();
+    appendMsg('assistant', 'Connection error. Please check your network and try again.');
+  }
+}
+
+function sendQuick(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderAllocBars();
+renderInvestments();
+renderPortfolio();
+setTimeout(updateProjector, 200);
+
+// Welcome message
+setTimeout(() => {
+  appendMsg('assistant', `**Welcome to CashFlow Compass.** I'm Compass, your AI retirement income advisor.\n\nI know all 15 verified income investments in this tool — including the Dividend Kings from your spreadsheet — plus your $15,000/month goal and the 5 and 10-year paths to get there.\n\n**Ask me anything:** Which investments to start with, how to build your allocation, tax strategy, JEPI vs JEPQ comparisons, or how Dividend Kings protect against inflation. What's on your mind?`);
+}, 300);
+</script>
+
+<div style="display:none;" class="disclaimer">
+  CashFlow Compass is an educational planning tool, not financial advice. Yields shown are approximate as of March 2026 and change with market conditions. Past performance and distributions do not guarantee future results. All projections are hypothetical. Consult a registered investment advisor before investing. Investment involves risk including possible loss of principal.
+</div>
+</body>
+</html>
